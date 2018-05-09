@@ -32,6 +32,7 @@ spec:
       imagePullSecrets:
         - name: {{ .Values.global.registryAuthSecret }}
       {{- end }}
+      imagePullPolicy: IfNotPresent
       containers:
         - name: {{ .Release.Name }}-webserver
           image: {{ .Values.images.airflow }}

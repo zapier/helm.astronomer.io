@@ -1,0 +1,9 @@
+################################
+## Chart overrides
+#################################
+
+# Global overrides
+global:
+  loadBalancerIP: 35.230.189.177
+  baseDomain: demo.astronomer.io
+  acme: true

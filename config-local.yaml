@@ -1,0 +1,20 @@
+airflow:
+
+  images:
+    airflow: astronomerio/ap-airflow:kube-24
+
+  env:
+    - name: AIRFLOW__KUBERNETES__WORKER_CONTAINER_REPOSITORY
+      value: astronomerio/ap-airflow
+    - name: AIRFLOW__KUBERNETES__WORKER_CONTAINER_TAG
+      value: kube-24
+    - name: AIRFLOW__KUBERNETES__NAMESPACE
+      value: greg-dev
+    - name: AIRFLOW__KUBERNETES__DELETE_WORKER_PODS
+      value: False
+    - name: AIRFLOW__CORE__REMOTE_LOGGING
+      value: True
+    - name: AIRFLOW__ELASTICSEARCH__ELASTICSEARCH_HOST
+      value: loopy-goat-elasticsearch:9200
+    - name: AIRFLOW__CORE__TASK_LOG_READER
+      value: "task"

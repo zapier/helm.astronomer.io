@@ -1,0 +1,10 @@
+################################
+## Chart overrides
+#################################
+
+# Global overrides
+global:
+  loadBalancerIP: 35.230.171.56
+  baseDomain: astronomer.io
+  tlsSecret: "astronomer-wildcard"
+  acme: false
