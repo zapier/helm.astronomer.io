@@ -6,6 +6,7 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: {{ .Release.Name }}-scheduler
+  namespace: airflow-tasks
   labels:
     tier: airflow
     release: {{ .Release.Name }}
@@ -13,7 +14,7 @@ metadata:
     heritage: {{ .Release.Service }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
+  kind: ClusterRole
   name: {{ .Release.Name }}-scheduler
 subjects:
   - kind: ServiceAccount

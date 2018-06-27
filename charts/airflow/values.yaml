@@ -45,6 +45,6 @@ env:
 # Astronomer Airflow database config
 data:
   airflowMetadataSecret: "airflow-metadata"
-  airflowResultBackendSecret: "airflow-result-backend"
-  airflowBrokerSecret: "airflow-broker"
+  # airflowResultBackendSecret: "airflow-result-backend"
+  # airflowBrokerSecret: "airflow-broker"
   grafanaBackendSecret: "grafana-backend"

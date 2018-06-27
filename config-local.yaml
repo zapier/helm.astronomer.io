@@ -1,20 +1,37 @@
+global:
+  modules:
+    astronomer:
+      enabled: false
+    airflow:
+      enabled: true
+    nginx:
+      enabled: false
+
 airflow:
 
   images:
-    airflow: astronomerio/ap-airflow:kube-24
+    airflow: astronomerio/ap-airflow:kube-13
 
   env:
     - name: AIRFLOW__KUBERNETES__WORKER_CONTAINER_REPOSITORY
       value: astronomerio/ap-airflow
     - name: AIRFLOW__KUBERNETES__WORKER_CONTAINER_TAG
-      value: kube-24
+      value: kube-13
     - name: AIRFLOW__KUBERNETES__NAMESPACE
-      value: greg-dev
+      value: airflow-tasks
     - name: AIRFLOW__KUBERNETES__DELETE_WORKER_PODS
-      value: False
-    - name: AIRFLOW__CORE__REMOTE_LOGGING
       value: True
+    - name: AIRFLOW__CORE__LOAD_EXAMPLES
+      value: False
+    - name: AIRFLOW__CORE__PARALLELISM
+      value: 1
+    - name: AIRFLOW__CORE__LOGGING_LEVEL
+      value: "DEBUG"
+    # - name: AIRFLOW__SCHEDULER__SCHEDULER_HEARTBEAT_SEC
+    #   value: 1
+    # - name: AIRFLOW__CORE__REMOTE_LOGGING
+    #   value: True
     - name: AIRFLOW__ELASTICSEARCH__ELASTICSEARCH_HOST
-      value: loopy-goat-elasticsearch:9200
-    - name: AIRFLOW__CORE__TASK_LOG_READER
-      value: "task"
+      value: original-condor-elasticsearch:9200
+    # - name: AIRFLOW__CORE__TASK_LOG_READER
+    #   value: "task"
