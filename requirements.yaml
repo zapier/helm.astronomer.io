@@ -8,3 +8,9 @@ dependencies:
   - name: nginx
     version: 0.2.1
     condition: global.modules.nginx.enabled,global.baseDomain
+  - name: elasticsearch
+    version: 0.2.1
+    condition: global.modules.elasticsearch.enabled
+  # - name: fluentd
+  #   version: 0.2.1
+  #   condition: global.modules.fluentd.enabled

@@ -7,15 +7,13 @@
   {{- end }}
   # Hard Coded Airflow Envs
   - name: AIRFLOW__CORE__EXECUTOR
-    value: "CeleryExecutor"
+    value: "KubernetesExecutor"
   - name: AIRFLOW__SCHEDULER__STATSD_ON
     value: "True"
   - name: AIRFLOW__SCHEDULER__STATSD_PORT
     value: "9125"
   - name: AIRFLOW__SCHEDULER__STATSD_PREFIX
     value: "airflow"
-  - name: ASTRONOMER__AIRFLOW__WORKER_LOG_RETENTION
-    value: "15"
   - name: AIRFLOW__WEBSERVER__BASE_URL
     value: {{- include "airflow_url" . | indent 1 }}
   # Dynamically created secret envs
@@ -34,24 +32,10 @@
       secretKeyRef:
         name: {{ .Values.data.airflowMetadataSecret }}
         key: connection
-  - name: AIRFLOW__CELERY__CELERY_RESULT_BACKEND
-    valueFrom:
-      secretKeyRef:
-        name: {{ .Values.data.airflowResultBackendSecret }}
-        key: connection
-  - name: AIRFLOW__CELERY__BROKER_URL
-    valueFrom:
-      secretKeyRef:
-        name: {{ .Values.data.airflowBrokerSecret }}
-        key: connection
 {{- end }}
 
 {{ define "airflow_url" -}}
 {{ .Release.Name }}-airflow.{{ .Values.global.baseDomain }}
-{{- end }}
-
-{{ define "flower_url" -}}
-{{ .Release.Name }}-flower.{{ .Values.global.baseDomain }}
 {{- end }}
 
 {{ define "grafana_url" -}}
