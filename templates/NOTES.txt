@@ -2,6 +2,58 @@ Thank you for installing Astronomer Enterprise!
 
 Your release is named {{ .Release.Name }}.
 
+---
+
+## Grafana
+
+{{- if .Values.global.acme -}}
+{{ $protocol := "https" }}
+{{- else -}}
+{{ $protocol := "http" }}
+{{- end -}}
+
+{{/* {{ $protocol }} */}}
+
+{{- if .Values.global.modules.grafana.enabled }}
+
+{{- if .Values.global.baseDomain }}
+
+Container Dashboard: {{ if .Values.global.acme }}https://{{ else }}http://{{ end }}grafana.{{ .Values.global.baseDomain }}/dashboard/db/airflow-containers
+
+Scheduler Dashboard: {{ if .Values.global.acme }}https://{{ else }}http://{{ end }}grafana.{{ .Values.global.baseDomain }}/dashboard/db/airflow-scheduler
+
+{{- else }}
+
+export NODE_IP=127.0.0.1
+export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ .Release.Name }}-grafana)
+echo http://$NODE_IP:$NODE_PORT/
+
+{{ end -}}
+
+{{ end -}}
+
+---
+
+{{- if .Values.global.modules.prometheus.enabled }}
+
+{{- if .Values.global.baseDomain }}
+
+{{/* Prometheus is not currently exposed over ingress. */}}
+
+{{- else }}
+
+## Prometheus
+
+export NODE_IP=127.0.0.1
+export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ .Release.Name }}-prometheus)
+echo http://$NODE_IP:$NODE_PORT/
+
+{{ end -}}
+
+{{ end -}}
+
+---
+
 {{ if and .Values.global.modules.airflow.enabled .Values.global.baseDomain }}
 
 ## Astronomer Airflow Install
@@ -10,8 +62,6 @@ After allowing a few minutes for the platform to come online, you can accesss re
 
 Webserver:            {{ if .Values.global.acme }}https://{{ else }}http://{{ end }}airflow.{{ .Values.global.baseDomain }}
 Flower:               {{ if .Values.global.acme }}https://{{ else }}http://{{ end }}flower.{{ .Values.global.baseDomain }}
-Container Dashboard:  {{ if .Values.global.acme }}https://{{ else }}http://{{ end }}grafana.{{ .Values.global.baseDomain }}/dashboard/db/airflow-containers
-Scheduler Dashboard:  {{ if .Values.global.acme }}https://{{ else }}http://{{ end }}grafana.{{ .Values.global.baseDomain }}/dashboard/db/airflow-scheduler
 Registry:             {{ if .Values.global.acme }}https://{{ else }}http://{{ end }}registry.{{ .Values.global.baseDomain }}
 
 {{ else }}
