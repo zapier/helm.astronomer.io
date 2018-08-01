@@ -11,3 +11,5 @@ dependencies:
     condition: global.modules.prometheus.enabled
   - name: elasticsearch
     condition: global.modules.elasticsearch.enabled
+  - name: fluentd
+    condition: global.modules.fluentd.enabled

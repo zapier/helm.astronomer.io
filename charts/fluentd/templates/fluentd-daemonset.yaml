@@ -1,0 +1,93 @@
+################################
+## Fluentd DaemonSet
+#################################
+apiVersion: apps/v1beta2
+kind: DaemonSet
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    tier: logging
+    component: {{ template "name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  selector:
+    matchLabels:
+      component: {{ template "name" . }}
+      chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  template:
+    metadata:
+      labels:
+        component: {{ template "name" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+      # This annotation ensures that fluentd does not get evicted if the node
+      # supports critical pod annotation based priority scheme.
+      # Note that this does not guarantee admission on the nodes (#40573).
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ''
+        checksum/config: {{ include (print $.Template.BasePath "/fluentd-configmap.yaml") . | sha256sum }}
+{{- if .Values.annotations }}
+{{ toYaml .Values.annotations | indent 8 }}
+{{- end }}
+    spec:
+      serviceAccountName: {{ template "fullname" . }}
+      containers:
+      - name: {{ template "fullname" . }}
+        image:  "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+        env:
+        - name: FLUENTD_ARGS
+          value: --no-supervisor -q
+        - name: OUTPUT_HOST
+          value: {{ template "elasticsearch_host" . }}
+        - name: OUTPUT_PORT
+          value: {{ .Values.elasticsearch.port | quote }}
+        - name: OUTPUT_BUFFER_CHUNK_LIMIT
+          value: {{ .Values.elasticsearch.buffer_chunk_limit | quote }}
+        - name: OUTPUT_BUFFER_QUEUE_LIMIT
+          value: {{ .Values.elasticsearch.buffer_queue_limit | quote }}
+        - name: K8S_NAMESPACE
+          value: "^{{ .Release.Namespace }}$"
+        - name: K8S_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        # resources:
+# {{ toYaml .Values.resources | indent 8 }}
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+        - name: varlibdockercontainers
+          mountPath: /var/lib/docker/containers
+          readOnly: true
+        - name: libsystemddir
+          mountPath: /host/lib
+          readOnly: true
+        - name: config-volume-{{ template "fullname" . }}
+          mountPath: /etc/fluent/config.d
+{{- if .Values.extraVolumeMounts }}
+{{ toYaml .Values.extraVolumeMounts | indent 8 }}
+{{- end }}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: varlog
+        hostPath:
+          path: /var/log
+      - name: varlibdockercontainers
+        hostPath:
+          path: /var/lib/docker/containers
+      # It is needed to copy systemd library to decompress journals
+      - name: libsystemddir
+        hostPath:
+          path: /usr/lib64
+      - name: config-volume-{{ template "fullname" . }}
+        configMap:
+          name: {{ template "fullname" . }}
+{{- if .Values.extraVolumes }}
+{{ toYaml .Values.extraVolumes | indent 6 }}
+{{- end }}
+{{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 6 }}
+{{- end }}

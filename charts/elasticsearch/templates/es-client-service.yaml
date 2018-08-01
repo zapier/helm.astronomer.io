@@ -1,3 +1,6 @@
+################################
+## Elasticsearch Client Service
+#################################
 apiVersion: v1
 kind: Service
 metadata:
@@ -7,12 +10,13 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-    component: {{ template "fullname" . }}
+    component: {{ template "name" . }}
     role: client
 spec:
   type: {{ .Values.common.serviceType }}
   selector:
-    component: {{ template "fullname" . }}
+    component: {{ template "name" . }}
+    release: {{ .Release.Name }}
     role: client
   ports:
   - name: http

@@ -1,3 +1,6 @@
+################################
+## Curator CronJob
+#################################
 {{- if .Values.curator.enabled }}
 apiVersion: {{ template "curator.cronJob.apiVersion" . }}
 kind: CronJob
@@ -5,7 +8,7 @@ metadata:
   name: {{ template "fullname" . }}-curator
   labels:
     tier: logging
-    component: {{ template "fullname" . }}
+    component: {{ template "name" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"

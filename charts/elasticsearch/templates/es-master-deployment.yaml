@@ -1,10 +1,13 @@
+################################
+## Elasticsearch Master Deployment
+#################################
 apiVersion: {{ if .Values.common.stateful.enabled }}apps/v1beta1{{ else }}extensions/v1beta1{{ end }}
 kind: {{ if .Values.common.stateful.enabled }}StatefulSet{{ else }}Deployment{{ end }}
 metadata:
   name: {{ template "fullname" . }}-master
   labels:
     tier: logging
-    component: {{ template "fullname" . }}
+    component: {{ template "name" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
@@ -17,7 +20,8 @@ spec:
   template:
     metadata:
       labels:
-        component: {{ template "fullname" . }}
+        component: {{ template "name" . }}
+        release: {{ .Release.Name }}
         role: master
     spec:
       {{- if eq .Values.master.antiAffinity "hard" }}
@@ -27,7 +31,8 @@ spec:
             - topologyKey: "kubernetes.io/hostname"
               labelSelector:
                 matchLabels:
-                  component: {{ template "fullname" . }}
+                  component: {{ template "name" . }}
+                  release: {{ .Release.Name }}
                   role: master
       {{- else if eq .Values.master.antiAffinity "soft" }}
       affinity:
@@ -38,7 +43,8 @@ spec:
               topologyKey: "kubernetes.io/hostname"
               labelSelector:
                 matchLabels:
-                  component: {{ template "fullname" . }}
+                  component: {{ template "name" . }}
+                  release: {{ .Release.Name }}
                   role: master
       {{- end }}
       initContainers:
