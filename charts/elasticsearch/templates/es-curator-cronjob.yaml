@@ -20,8 +20,8 @@ spec:
         spec:
           containers:
           - name: curator
-            image: "{{ .Values.image.curator.repository }}:{{ .Values.image.curator.tag }}"
-            imagePullPolicy: {{ .Values.image.curator.pullPolicy }}
+            image: "{{ .Values.images.curator.repository }}:{{ .Values.images.curator.tag }}"
+            imagePullPolicy: {{ .Values.images.curator.pullPolicy }}
             args: ["--config", "/etc/config/config.yml", "/etc/config/action_file.yml"]
             volumeMounts:
               - name: config-volume

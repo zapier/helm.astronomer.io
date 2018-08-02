@@ -1,4 +1,4 @@
-image:
+images:
   es:
     repository: astronomerinc/ap-elasticsearch
     tag: 0.4.0-rc.1
@@ -91,7 +91,7 @@ data:
   stateful:
     # This is a default value, and will not be sufficient in a production
     # system. You'll probably want to increase it.
-    size: 12Gi
+    size: 50Gi
 
 # The master node is responsible for lightweight cluster-wide actions such as
 # creating or deleting an index, tracking which nodes are part of the
@@ -128,7 +128,7 @@ master:
   stateful:
     # This is a default value, and will not be sufficient in a production
     # system. You'll probably want to increase it.
-    size: 2Gi
+    size: 10Gi
 
 curator:
   enabled: true
@@ -140,7 +140,7 @@ curator:
   age:
     timestring: "%Y.%m.%d"
     unit: "days"
-    unit_count: 3
+    unit_count: 15
 
 service:
   httpPort: 9200
