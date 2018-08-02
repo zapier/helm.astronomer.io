@@ -220,7 +220,7 @@ configMaps:
       @type grep
       <regexp>
         key $.kubernetes.namespace_name
-        pattern "#{ENV['K8S_NAMESPACE']}"
+        pattern "^#{ENV['K8S_NAMESPACE']}$"
       </regexp>
       <regexp>
         key $.kubernetes.labels.component

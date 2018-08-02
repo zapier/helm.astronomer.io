@@ -48,7 +48,7 @@ spec:
         - name: OUTPUT_BUFFER_QUEUE_LIMIT
           value: {{ .Values.elasticsearch.buffer_queue_limit | quote }}
         - name: K8S_NAMESPACE
-          value: "^{{ .Release.Namespace }}$"
+          value: "{{ .Release.Namespace }}"
         - name: K8S_NODE_NAME
           valueFrom:
             fieldRef:
