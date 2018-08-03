@@ -34,6 +34,10 @@ common:
     # "gp2" would be appropriate.
     class: "standard"
 
+  ports:
+    http: 9200
+    transport: 9300
+
 # Client/ingest nodes can execute pre-processing pipelines, composed of
 # one or more ingest processors. Depending on the type of operations performed
 # by the ingest processors and the required resources, it may make sense to
@@ -141,10 +145,6 @@ curator:
     timestring: "%Y.%m.%d"
     unit: "days"
     unit_count: 15
-
-service:
-  httpPort: 9200
-  transportPort: 9300
 
 kibana:
   enabled: true

@@ -85,19 +85,19 @@ spec:
         resources:
 {{ toYaml .Values.client.resources | indent 10 }}
         ports:
-        - containerPort: 9200
+        - containerPort: {{ .Values.common.ports.http }}
           name: http
           protocol: TCP
-        - containerPort: 9300
+        - containerPort: {{ .Values.common.ports.transport }}
           name: transport
           protocol: TCP
         livenessProbe:
           tcpSocket:
-            port: 9300
+            port: {{ .Values.common.ports.transport }}
         readinessProbe:
           httpGet:
             path: /_cluster/health
-            port: 9200
+            port: {{ .Values.common.ports.http }}
           initialDelaySeconds: 20
           timeoutSeconds: 5
         volumeMounts:

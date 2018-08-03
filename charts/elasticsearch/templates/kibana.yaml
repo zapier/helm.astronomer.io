@@ -28,7 +28,7 @@ spec:
         - name: CLUSTER_NAME
           value: {{ .Values.common.env.CLUSTER_NAME }}
         - name: ELASTICSEARCH_URL
-          value: http://{{ $elasticsearchServiceName }}:{{ .Values.service.httpPort }}
+          value: http://{{ $elasticsearchServiceName }}:{{ .Values.common.ports.http }}
         {{- range $key, $value :=  .Values.kibana.env }}
         - name: {{ $key }}
           value: {{ $value | quote }}

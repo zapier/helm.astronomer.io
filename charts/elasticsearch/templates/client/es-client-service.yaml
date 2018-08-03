@@ -20,10 +20,10 @@ spec:
     role: client
   ports:
   - name: http
-    port: {{ .Values.service.httpPort }}
-    targetPort: 9200
+    port: {{ .Values.common.ports.http }}
+    targetPort: {{ .Values.common.ports.http }}
     protocol: TCP
   - name: transport
-    port: {{ .Values.service.transportPort }}
-    targetPort: 9300
+    port: {{ .Values.common.ports.transport }}
+    targetPort: {{ .Values.common.ports.transport }}
     protocol: TCP
