@@ -28,6 +28,7 @@ data:
         options:
           timeout_override:
           continue_if_exception: False
+          ignore_empty_list: True
           disable_action: False
         filters:
         - filtertype: age
