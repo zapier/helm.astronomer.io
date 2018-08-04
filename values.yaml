@@ -56,6 +56,10 @@ global:
     elasticsearch:
       enabled: true
 
+    # Enable Kibana module
+    kibana:
+      enabled: true
+
     # Enable Fluentd module
     fluentd:
       enabled: true

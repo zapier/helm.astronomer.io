@@ -11,5 +11,7 @@ dependencies:
     condition: global.modules.prometheus.enabled
   - name: elasticsearch
     condition: global.modules.elasticsearch.enabled
+  - name: kibana
+    condition: global.modules.kibana.enabled
   - name: fluentd
     condition: global.modules.fluentd.enabled
