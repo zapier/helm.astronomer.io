@@ -19,7 +19,9 @@ spec:
   template:
     metadata:
       labels:
+        tier: logging
         component: {{ template "name" . }}
+        release: {{ .Release.Name }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
       # This annotation ensures that fluentd does not get evicted if the node
       # supports critical pod annotation based priority scheme.

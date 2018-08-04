@@ -17,6 +17,7 @@ spec:
   template:
     metadata:
       labels:
+        tier: logging
         component: {{ template "name" . }}
         release: {{ .Release.Name }}
         role: client

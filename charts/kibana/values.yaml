@@ -1,0 +1,24 @@
+images:
+  kibana:
+    repository: astronomerinc/ap-kibana
+    tag: 0.4.0-rc.1
+    pullPolicy: Always
+
+clusterName: "astronomer"
+enabled: true
+replicas: 1
+resources:
+  limits:
+    cpu: 1000m
+  requests:
+    cpu: 100m
+env:
+  # XPACK_GRAPH_ENABLED: "false"
+  # XPACK_ML_ENABLED: "false"
+  # XPACK_REPORTING_ENABLED: "false"
+  # XPACK_SECURITY_ENABLED: "false"
+
+serviceType: NodePort
+
+ports:
+  http: 5601

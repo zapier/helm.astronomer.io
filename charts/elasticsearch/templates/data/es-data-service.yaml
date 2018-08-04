@@ -15,7 +15,7 @@ metadata:
     role: data
 spec:
   ports:
-  - port: 9300
+  - port: {{ .Values.common.ports.transport }}
     name: transport
   clusterIP: None
   selector:

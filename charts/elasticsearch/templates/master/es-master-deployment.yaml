@@ -20,6 +20,7 @@ spec:
   template:
     metadata:
       labels:
+        tier: logging
         component: {{ template "name" . }}
         release: {{ .Release.Name }}
         role: master
@@ -92,12 +93,12 @@ spec:
         resources:
 {{ toYaml .Values.master.resources | indent 10 }}
         ports:
-        - containerPort: 9300
+        - containerPort: {{ .Values.common.ports.transport }}
           name: transport
           protocol: TCP
         livenessProbe:
           tcpSocket:
-            port: 9300
+            port: {{ .Values.common.ports.transport }}
         volumeMounts:
         - name: storage
           mountPath: /data

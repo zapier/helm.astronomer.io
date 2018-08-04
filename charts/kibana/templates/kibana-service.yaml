@@ -1,0 +1,23 @@
+################################
+## Kibana Service
+#################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "kibana.fullname" . }}
+  labels:
+    tier: logging
+    component: {{ template "kibana.name" . }}
+    chart: {{ template "kibana.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.serviceType }}
+  selector:
+    tier: logging
+    component: {{ template "kibana.name" . }}
+    release: {{ .Release.Name }}
+  ports:
+  - port: {{ .Values.ports.http }}
+    targetPort: {{ .Values.ports.http }}
+    protocol: TCP

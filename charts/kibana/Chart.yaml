@@ -1,0 +1,5 @@
+name: kibana
+version: 0.0.0
+description: Helm chart to deploy the Astronomer Kibana module
+keywords:
+  - astronomer
