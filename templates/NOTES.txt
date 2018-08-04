@@ -12,6 +12,7 @@ You can access the platform at:
 
 - Astronomer app:        https://app.{{ .Values.global.baseDomain }}
 - Grafana dashboard:     https://grafana.{{ .Values.global.baseDomain }}
+- Kibana dashboard:      https://kibana.{{ .Values.global.baseDomain }}
 
 Now that you've installed the platform, you are ready to get started and create your first airflow deployment.
 
