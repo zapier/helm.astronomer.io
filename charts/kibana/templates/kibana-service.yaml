@@ -18,6 +18,7 @@ spec:
     component: {{ template "kibana.name" . }}
     release: {{ .Release.Name }}
   ports:
-  - port: {{ .Values.ports.http }}
+  - name: kibana-ui
+    port: {{ .Values.ports.http }}
     targetPort: {{ .Values.ports.http }}
     protocol: TCP
