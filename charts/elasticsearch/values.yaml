@@ -27,12 +27,12 @@ common:
 
   # If enabled, then the data and master nodes will be StatefulSets with
   # associated persistent volume claims.
-  stateful:
-    enabled: false
+  persistence:
+    enabled: true
 
     # The PVC storage class that backs the persistent volume claims. On AWS
     # "gp2" would be appropriate.
-    class: "standard"
+    storageClassName: "standard"
 
   ports:
     http: 9200
@@ -90,9 +90,9 @@ data:
     HTTP_ENABLE: "false"
 
   # Determines the properties of the persistent volume claim associated with a
-  # data node StatefulSet that is created when the common.stateful.enabled
+  # data node StatefulSet that is created when the common.persistence.enabled
   # attribute is true.
-  stateful:
+  persistence:
     # This is a default value, and will not be sufficient in a production
     # system. You'll probably want to increase it.
     size: 50Gi
@@ -129,7 +129,7 @@ master:
   # Determines the properties of the persistent volume claim associated with a
   # data node StatefulSet that is created when the common.stateful.enabled
   # attribute is true.
-  stateful:
+  persistence:
     # This is a default value, and will not be sufficient in a production
     # system. You'll probably want to increase it.
     size: 10Gi

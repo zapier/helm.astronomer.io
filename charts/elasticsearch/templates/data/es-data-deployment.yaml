@@ -1,8 +1,8 @@
 ################################
 ## Elasticsearch Data Deployment
 #################################
-apiVersion: {{ if .Values.common.stateful.enabled }}apps/v1beta1{{ else }}extensions/v1beta1{{ end }}
-kind: {{ if .Values.common.stateful.enabled }}StatefulSet{{ else }}Deployment{{ end }}
+apiVersion: {{ if .Values.common.persistence.enabled }}apps/v1beta1{{ else }}extensions/v1beta1{{ end }}
+kind: {{ if .Values.common.persistence.enabled }}StatefulSet{{ else }}Deployment{{ end }}
 metadata:
   name: {{ template "fullname" . }}-data
   labels:
@@ -13,7 +13,7 @@ metadata:
     heritage: "{{ .Release.Service }}"
     role: data
 spec:
-  {{- if .Values.common.stateful.enabled }}
+  {{- if .Values.common.persistence.enabled }}
   serviceName: {{ template "fullname" . }}-data
   {{- end }}
   replicas: {{ .Values.data.replicas }}
@@ -58,10 +58,10 @@ spec:
       containers:
       - name: es-data
         securityContext:
-          privileged: {{ .Values.common.stateful.enabled }}
+          privileged: {{ .Values.common.persistence.enabled }}
           capabilities:
             add:
-              {{- if .Values.common.stateful.enabled }}
+              {{- if .Values.common.persistence.enabled }}
               - IPC_LOCK
               {{- else }}
               - IPC_LOCK
@@ -104,21 +104,21 @@ spec:
         volumeMounts:
         - name: storage
           mountPath: /data
-      {{- if not .Values.common.stateful.enabled }}
+      {{- if not .Values.common.persistence.enabled }}
       volumes:
         - emptyDir:
             medium: ""
           name: "storage"
       {{- end }}
-  {{- if .Values.common.stateful.enabled }}
+  {{- if .Values.common.persistence.enabled }}
   volumeClaimTemplates:
   - metadata:
       name: storage
       annotations:
-        volume.beta.kubernetes.io/storage-class: {{ .Values.common.stateful.class }}
+        volume.beta.kubernetes.io/storage-class: {{ .Values.common.persistence.storageClassName }}
     spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
-          storage: {{ .Values.data.stateful.size }}
+          storage: {{ .Values.data.persistence.size }}
   {{- end }}
