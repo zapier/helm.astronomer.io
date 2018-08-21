@@ -31,6 +31,7 @@ spec:
         workspace: {{ .Values.workspace }}
     spec:
       terminationGracePeriodSeconds: {{ .Values.workers.terminationGracePeriodSeconds }}
+      serviceAccountName: {{ .Release.Name }}-worker-serviceaccount
       securityContext:
         runAsUser: {{ .Values.uid }}
         fsGroup: {{ .Values.gid }}
