@@ -4,10 +4,10 @@
 images:
   nginx:
     name: astronomerinc/ap-nginx
-    tag: 0.4.1
+    tag: 0.4.2-rc.5
   defaultBackend:
     name: astronomerinc/ap-default-backend
-    tag: 0.4.1
+    tag: 0.4.2-rc.5
 
 forceNamespaceIsolation: true
 ingressClass: ~
@@ -38,3 +38,8 @@ proxySendTimeout: 600
 proxyBodySize: "512m"
 hstsIncludeSubdomains: false
 serverNameHashBucketSize: 256
+
+ports:
+  http: 80
+  https: 443
+  healthz: 10254
