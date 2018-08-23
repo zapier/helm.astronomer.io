@@ -5,6 +5,7 @@ kind: Deployment
 apiVersion: apps/v1beta2
 metadata:
   name: {{ .Release.Name }}-flower
+  namespace: {{ include "namespace" . }}
   labels:
     tier: airflow
     component: flower
@@ -31,9 +32,9 @@ spec:
       restartPolicy: Always
       securityContext:
         runAsUser: {{ .Values.uid }}
-      {{- if .Values.global.registryAuthSecret }}
+      {{- if .Values.registryAuthSecret }}
       imagePullSecrets:
-        - name: {{ .Values.global.registryAuthSecret }}
+        - name: {{ .Values.registryAuthSecret }}
       {{- end }}
       containers:
         - name: {{ .Release.Name }}-flower

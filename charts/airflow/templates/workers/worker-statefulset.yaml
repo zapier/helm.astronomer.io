@@ -5,6 +5,7 @@ kind: StatefulSet
 apiVersion: apps/v1beta2
 metadata:
   name: {{ .Release.Name }}-worker
+  namespace: {{ include "namespace" . }}
   labels:
     tier: airflow
     component: worker
@@ -35,9 +36,9 @@ spec:
       securityContext:
         runAsUser: {{ .Values.uid }}
         fsGroup: {{ .Values.gid }}
-      {{- if .Values.global.registryAuthSecret }}
+      {{- if .Values.registryAuthSecretName }}
       imagePullSecrets:
-        - name: {{ .Values.global.registryAuthSecret }}
+        - name: {{ .Values.registryAuthSecretName }}
       {{- end }}
       containers:
         - name: {{ .Release.Name }}-worker

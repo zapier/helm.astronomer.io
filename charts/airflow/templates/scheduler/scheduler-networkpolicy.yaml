@@ -1,10 +1,12 @@
 ################################
 ## Airflow Scheduler NetworkPolicy
 #################################
+{{- if .Values.networkPolicies.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: {{ .Release.Name }}-scheduler-policy
+  namespace: {{ include "namespace" . }}
   labels:
     tier: airflow
     component: airflow-scheduler-policy
@@ -20,3 +22,4 @@ spec:
       release: {{ .Release.Name }}
   policyTypes:
   - Ingress
+{{- end }}

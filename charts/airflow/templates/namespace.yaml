@@ -1,14 +1,13 @@
 ################################
-## Worker ServiceAccount
+## Airflow Namespace
 #################################
-{{- if .Values.rbacEnabled }}
-kind: ServiceAccount
+{{- if .Values.platform.namespace }}
+kind: Namespace
 apiVersion: v1
 metadata:
-  name: {{ .Release.Name }}-worker-serviceaccount
-  namespace: {{ include "namespace" . }}
+  name: {{ include "namespace" . }}
   labels:
-    tier: airflow
+    tier: deployment
     release: {{ .Release.Name }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     heritage: {{ .Release.Service }}

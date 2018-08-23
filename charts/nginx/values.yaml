@@ -9,6 +9,9 @@ images:
     name: astronomerinc/ap-default-backend
     tag: 0.4.1
 
+forceNamespaceIsolation: true
+ingressClass: ~
+
 resources: {}
 #  limits:
 #   cpu: 100m
@@ -35,6 +38,3 @@ proxySendTimeout: 600
 proxyBodySize: "512m"
 hstsIncludeSubdomains: false
 serverNameHashBucketSize: 256
-# Restrict nginx to only watching for ingress on the helm release namespace
-watchReleaseNamespace: true
-forceNamespaceIsolation: true

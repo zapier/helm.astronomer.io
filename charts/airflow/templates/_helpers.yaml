@@ -34,12 +34,12 @@
   - name: AIRFLOW__CORE__SQL_ALCHEMY_CONN
     valueFrom:
       secretKeyRef:
-        name: {{ .Values.data.airflowMetadataSecret }}
+        name: {{ template "airflow_metadata_secret" . }}
         key: connection
   - name: AIRFLOW__CELERY__CELERY_RESULT_BACKEND
     valueFrom:
       secretKeyRef:
-        name: {{ .Values.data.airflowResultBackendSecret }}
+        name: {{ template "airflow_result_backend_secret" . }}
         key: connection
   - name: AIRFLOW__CELERY__BROKER_URL
     valueFrom:
@@ -53,34 +53,50 @@
         key: fernet-key
 {{- end }}
 
+{{- define "namespace" -}}
+{{- if and .Values.platform.namespace -}}
+{{- printf "%s-%s" .Values.platform.namespace .Release.Name -}}
+{{- else -}}
+{{- .Release.Namespace }}
+{{- end -}}
+{{- end -}}
+
 {{ define "airflow_url" -}}
-{{ .Release.Name }}-airflow.{{ .Values.global.baseDomain }}
+{{ .Release.Name }}-airflow.{{ .Values.ingress.baseDomain }}
 {{- end }}
 
 {{ define "flower_url" -}}
-{{ .Release.Name }}-flower.{{ .Values.global.baseDomain }}
+{{ .Release.Name }}-flower.{{ .Values.ingress.baseDomain }}
 {{- end }}
 
 {{ define "airflow_image" -}}
-{{ .Values.images.airflow.name }}:{{ or .Values.global.imageTag .Values.images.airflow.tag }}
+{{ .Values.images.airflow.name }}:{{ .Values.images.airflow.tag }}
 {{- end }}
 
 {{ define "flower_image" -}}
-{{ .Values.images.flower.name }}:{{ or .Values.global.imageTag .Values.images.flower.tag }}
+{{ .Values.images.flower.name }}:{{ .Values.images.flower.tag }}
 {{- end }}
 
 {{ define "statsd_image" -}}
-{{ .Values.images.statsd.name }}:{{ or .Values.global.imageTag .Values.images.statsd.tag }}
+{{ .Values.images.statsd.name }}:{{ .Values.images.statsd.tag }}
+{{- end }}
+
+{{ define "redis_image" -}}
+{{ .Values.images.redis.name }}:{{ .Values.images.redis.tag }}
 {{- end }}
 
 {{ define "fernet_key_secret" -}}
 {{ default (printf "%s-fernet-key" .Release.Name) .Values.fernetKeySecretName }}
 {{- end }}
 
-{{ define "redis_image" -}}
-{{ .Values.images.redis.name }}:{{ or .Values.global.imageTag .Values.images.redis.tag }}
-{{- end }}
-
 {{ define "redis_password_secret" -}}
 {{ default (printf "%s-redis-password" .Release.Name) .Values.redis.passwordSecretName }}
+{{- end }}
+
+{{ define "airflow_metadata_secret" -}}
+{{ default (printf "%s-airflow-metadata" .Release.Name) .Values.data.metadataSecretName }}
+{{- end }}
+
+{{ define "airflow_result_backend_secret" -}}
+{{ default (printf "%s-airflow-result-backend" .Release.Name) .Values.data.resultBackendSecretName }}
 {{- end }}

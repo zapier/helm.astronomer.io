@@ -6,6 +6,42 @@
 uid: 100
 gid: 101
 
+# Ingress configuration
+ingress:
+  # Enable ingress resource
+  enabled: false
+
+  # Enable for cert-manager or kube-lego
+  acme: false
+
+  # Name of tls secret to use on ingress
+  tlsSecretName: ~
+
+  # Base domain for ingress vhosts
+  baseDomain: ~
+
+  # If deployed from the Astronomer platform, this will be overridden
+  # to a class that matches the platform release name. This lets us run
+  # multiple platforms in one cluster and have deployments from one platform
+  # use the corresponding platform ingress controller.
+  class: "nginx"
+
+  # Enable platform authentication
+  auth: 
+    enabled: true
+
+# Network policy configuration
+networkPolicies:
+  # Enabled network policies
+  enabled: false
+
+# Auth secret for a private registry
+# This is used if pulling airflow images from a private registry
+registryAuthSecretName: ~
+
+# Enable RBAC (default on most clusters these days)
+rbacEnabled: true
+
 # Astronomer Airflow images
 images:
   airflow:
@@ -26,16 +62,17 @@ env:
 
 # Astronomer Airflow database config
 data:
-  airflowMetadataSecret: airflow-metadata
-  airflowResultBackendSecret: airflow-result-backend
+  # If secret names are provided, use those secrets
+  metadataSecretName: ~
+  resultBackendSecretName: ~
+
+  # Otherwise use connection strings
+  metadataConnectionString: ~
+  resultBackendConnectionString: ~
 
 # Fernet key settings
 fernetKey: ~
 fernetKeySecretName: ~
-
-# Enable platform authentication
-auth:
-  enabled: true
 
 # Airflow Worker Config
 workers:
@@ -139,3 +176,10 @@ ports:
   redisDB: 6379
   statsdIngest: 9125
   statsdScrape: 9102
+
+# This block contains settings strictly used to integrate into the Astronomer platform.
+# This is what allows for integration into platform ingress, network policies, metrics collection, etc.
+# This chart is completely deployable without specifying these values.
+platform:
+  namespace: ~
+  release: ~

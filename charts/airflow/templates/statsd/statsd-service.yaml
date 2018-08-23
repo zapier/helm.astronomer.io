@@ -5,6 +5,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: {{ .Release.Name }}-statsd
+  namespace: {{ include "namespace" . }}
   labels:
     tier: airflow
     component: statsd
@@ -13,6 +14,9 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     heritage: {{ .Release.Service }}
   annotations:
+    {{- if .Values.platform.release }}
+    astronomer.io/platform-release: {{ .Values.platform.release }}
+    {{- end }}
     prometheus.io/scrape: "true"
     prometheus.io/port: {{ .Values.ports.statsdScrape | quote }}
 spec:
