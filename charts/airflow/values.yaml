@@ -169,6 +169,7 @@ redis:
   # else generate a new one on install
   password: ~
 
+# All ports used by chart
 ports:
   flowerUI: 5555
   airflowUI: 8080
@@ -176,6 +177,12 @@ ports:
   redisDB: 6379
   statsdIngest: 9125
   statsdScrape: 9102
+
+# Define any ResourceQuotas for namespace
+quotas: {}
+
+# Define default/max/min values for pods and containers in namespace
+limits: {}
 
 # This block contains settings strictly used to integrate into the Astronomer platform.
 # This is what allows for integration into platform ingress, network policies, metrics collection, etc.

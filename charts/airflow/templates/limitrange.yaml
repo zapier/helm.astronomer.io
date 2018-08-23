@@ -1,0 +1,13 @@
+################################
+## Airflow Namespace LimitRange
+#################################
+{{- if and .Values.platform.namespace .Values.limits }}
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: {{ .Release.Name }}-limit-range
+  namespace: {{ include "namespace" . }}
+spec:
+  limits:
+{{ toYaml .Values.limits | indent 4 }}
+{{- end }}

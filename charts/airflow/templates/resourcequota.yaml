@@ -1,0 +1,13 @@
+################################
+## Airflow Namespace ResourceQuota
+#################################
+{{- if and .Values.platform.namespace .Values.quotas }}
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: {{ .Release.Name }}-resource-quota
+  namespace: {{ include "namespace" . }}
+spec:
+  hard:
+{{ toYaml .Values.quotas | indent 4 }}
+{{- end }}
