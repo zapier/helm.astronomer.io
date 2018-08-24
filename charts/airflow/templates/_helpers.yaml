@@ -16,10 +16,12 @@
     value: "9125"
   - name: AIRFLOW__SCHEDULER__STATSD_PREFIX
     value: "airflow"
+  - name: AIRFLOW__WEBSERVER__BASE_URL
+    value: {{ include "airflow_url" . }}
+  - name: AIRFLOW__KUBERNETES__NAMESPACE
+    value: {{ include "namespace" . }}
   - name: ASTRONOMER__AIRFLOW__WORKER_LOG_RETENTION
     value: "15"
-  - name: AIRFLOW__WEBSERVER__BASE_URL
-    value: {{- include "airflow_url" . | indent 1 }}
   # Dynamically created secret envs
   {{- range $i, $config := .Values.secret }}
   - name: {{ $config.name }}
