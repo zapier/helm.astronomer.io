@@ -66,9 +66,19 @@ data:
   metadataSecretName: ~
   resultBackendSecretName: ~
 
-  # Otherwise use connection strings
-  metadataConnectionString: ~
-  resultBackendConnectionString: ~
+  # Otherwise pass connection values in
+  metadataConnection: {}
+    # user: ~
+    # pass: ~
+    # host: ~
+    # port: ~
+    # db: ~
+  resultBackendConnection: {}
+    # user: ~
+    # pass: ~
+    # host: ~
+    # port: ~
+    # db: ~
 
 # Fernet key settings
 fernetKey: ~
