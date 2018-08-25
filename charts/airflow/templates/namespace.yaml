@@ -11,4 +11,6 @@ metadata:
     release: {{ .Release.Name }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     heritage: {{ .Release.Service }}
+  annotations:
+    "helm.sh/hook": "pre-install"
 {{- end }}
