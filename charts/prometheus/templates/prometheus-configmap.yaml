@@ -68,10 +68,14 @@ data:
             target_label: systemd_service_name
             replacement: '${1}'
 
-            # Only keep metrics from the platforms namespace
+            # Only keep metrics that start with platforms namespace (includes airflow children)
           - action: keep
             source_labels: [namespace]
             regex: "^{{ .Release.Namespace }}.*"
+
+            # Drop some unnecessary labels
+          - regex: "^(id|name)"
+            action: labeldrop
 
             # This will patch up most metrics
           - source_labels: [container_name]

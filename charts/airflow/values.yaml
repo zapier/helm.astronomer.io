@@ -46,16 +46,22 @@ rbacEnabled: true
 images:
   airflow:
     name: astronomerinc/ap-airflow
-    tag: 0.4.2-rc.5
+    tag: 0.4.2-rc.13
   flower:
     name: astronomerinc/ap-airflow
-    tag: 0.4.2-rc.5
+    tag: 0.4.2-rc.13
   statsd:
     name: astronomerinc/ap-statsd-exporter
-    tag: 0.4.2-rc.5
+    tag: 0.4.2-rc.13
   redis:
-    name:  astronomerinc/ap-redis
-    tag: 0.4.2-rc.5
+    name: astronomerinc/ap-redis
+    tag: 0.4.2-rc.13
+  pgbouncer:
+    name: astronomerinc/ap-pgbouncer
+    tag: 0.4.2-rc.13
+  pgbouncerExporter:
+    name: astronomerinc/ap-pgbouncer-exporter
+    tag: 0.4.2-rc.13
 
 # Environment variables for all airflow containers
 env:
@@ -152,6 +158,22 @@ statsd:
     #   cpu: 100m
     #   memory: 128Mi
 
+# Pgbouncer settings
+pgbouncer:
+  # Enable pgbouncer
+  enabled: false
+
+  # Pool size
+  poolSize: 3
+
+  resources: {}
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+
 redis:
   terminationGracePeriodSeconds: 600
 
@@ -187,6 +209,8 @@ ports:
   redisDB: 6379
   statsdIngest: 9125
   statsdScrape: 9102
+  pgbouncer: 6543
+  pgbouncerScrape: 9127
 
 # Define any ResourceQuotas for namespace
 quotas: {}

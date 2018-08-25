@@ -1,15 +1,15 @@
 ################################
-## Airflow StatsD NetworkPolicy
+## Pgbouncer NetworkPolicy
 #################################
 {{- if .Values.networkPolicies.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: {{ .Release.Name }}-statsd-policy
+  name: {{ .Release.Name }}-pgbouncer-policy
   namespace: {{ include "namespace" . }}
   labels:
     tier: airflow
-    component: statsd-policy
+    component: airflow-pgbouncer-policy
     release: {{ .Release.Name }}
     workspace: {{ .Values.workspace }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
@@ -18,7 +18,7 @@ spec:
   podSelector:
     matchLabels:
       tier: airflow
-      component: statsd
+      component: pgbouncer
       release: {{ .Release.Name }}
   policyTypes:
   - Ingress
@@ -37,10 +37,10 @@ spec:
           release: {{ .Values.platform.release }}
     {{- end }}
     ports:
-    - protocol: UDP
-      port: {{ .Values.ports.statsdIngest }}
+    - protocol: TCP
+      port: {{ .Values.ports.pgbouncer }}
   {{- if .Values.platform.release }}
     - protocol: TCP
-      port: {{ .Values.ports.statsdScrape }}
+      port: {{ .Values.ports.pgbouncerScrape }}
   {{- end }}
 {{- end }}

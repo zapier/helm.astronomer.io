@@ -87,6 +87,14 @@
 {{ .Values.images.redis.name }}:{{ .Values.images.redis.tag }}
 {{- end }}
 
+{{ define "pgbouncer_image" -}}
+{{ .Values.images.pgbouncer.name }}:{{ .Values.images.pgbouncer.tag }}
+{{- end }}
+
+{{ define "pgbouncer_exporter_image" -}}
+{{ .Values.images.pgbouncerExporter.name }}:{{ .Values.images.pgbouncerExporter.tag }}
+{{- end }}
+
 {{ define "fernet_key_secret" -}}
 {{ default (printf "%s-fernet-key" .Release.Name) .Values.fernetKeySecretName }}
 {{- end }}
@@ -101,4 +109,31 @@
 
 {{ define "airflow_result_backend_secret" -}}
 {{ default (printf "%s-airflow-result-backend" .Release.Name) .Values.data.resultBackendSecretName }}
+{{- end }}
+
+{{ define "pgbouncer_config_secret" -}}
+{{ .Release.Name }}-pgbouncer-config
+{{- end }}
+
+{{ define "pgbouncer_stats_secret" -}}
+{{ .Release.Name }}-pgbouncer-stats
+{{- end }}
+
+{{ define "pgbouncer_config" }}
+[databases]
+{{ .Release.Name }} = host={{ .Values.data.metadataConnection.host }} dbname={{ .Values.data.metadataConnection.db }} port={{ .Values.data.metadataConnection.port }} pool_size={{ .Values.pgbouncer.poolSize }}
+
+[pgbouncer]
+pool_mode = transaction
+listen_port = {{ .Values.ports.pgbouncer }}
+listen_addr = *
+auth_type = md5
+auth_file = /etc/pgbouncer/users.txt
+stats_users = {{ .Values.data.metadataConnection.user }}
+ignore_startup_parameters = extra_float_digits
+{{- end }}
+
+{{ define "pgbouncer_users" }}
+{{ .Values.data.metadataConnection.user | quote }} {{ .Values.data.metadataConnection.pass | quote }}
+{{ .Values.data.resultBackendConnection.user | quote }} {{ .Values.data.resultBackendConnection.pass | quote }}
 {{- end }}
