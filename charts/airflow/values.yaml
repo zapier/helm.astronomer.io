@@ -27,7 +27,7 @@ ingress:
   class: "nginx"
 
   # Enable platform authentication
-  auth: 
+  auth:
     enabled: true
 
 # Network policy configuration
@@ -46,22 +46,22 @@ rbacEnabled: true
 images:
   airflow:
     name: astronomerinc/ap-airflow
-    tag: 0.4.2-rc.15
+    tag: 0.4.2-rc.23
   flower:
     name: astronomerinc/ap-airflow
-    tag: 0.4.2-rc.15
+    tag: 0.4.2-rc.23
   statsd:
     name: astronomerinc/ap-statsd-exporter
-    tag: 0.4.2-rc.15
+    tag: 0.4.2-rc.23
   redis:
     name: astronomerinc/ap-redis
-    tag: 0.4.2-rc.15
+    tag: 0.4.2-rc.23
   pgbouncer:
     name: astronomerinc/ap-pgbouncer
-    tag: 0.4.2-rc.15
+    tag: 0.4.2-rc.23
   pgbouncerExporter:
     name: astronomerinc/ap-pgbouncer-exporter
-    tag: 0.4.2-rc.15
+    tag: 0.4.2-rc.23
 
 # Environment variables for all airflow containers
 env:

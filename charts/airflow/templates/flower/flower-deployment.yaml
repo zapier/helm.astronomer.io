@@ -45,16 +45,18 @@ spec:
             - name: flower-ui
               containerPort: {{ .Values.ports.flowerUI }}
           livenessProbe:
+            failureThreshold: 10
             httpGet:
               path: /
               port: {{ .Values.ports.flowerUI }}
             initialDelaySeconds: 10
-            periodSeconds: 10
+            periodSeconds: 5
           readinessProbe:
+            failureThreshold: 10
             httpGet:
               path: /
               port: {{ .Values.ports.flowerUI }}
             initialDelaySeconds: 10
-            periodSeconds: 10
+            periodSeconds: 5
           env:
           {{- include "airflow_environment" . | indent 10 }}
