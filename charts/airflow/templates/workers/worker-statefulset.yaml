@@ -5,7 +5,6 @@ kind: StatefulSet
 apiVersion: apps/v1beta2
 metadata:
   name: {{ .Release.Name }}-worker
-  namespace: {{ include "namespace" . }}
   labels:
     tier: airflow
     component: worker

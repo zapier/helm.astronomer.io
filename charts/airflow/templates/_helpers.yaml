@@ -19,7 +19,7 @@
   - name: AIRFLOW__WEBSERVER__BASE_URL
     value: {{ include "airflow_url" . }}
   - name: AIRFLOW__KUBERNETES__NAMESPACE
-    value: {{ include "namespace" . }}
+    value: {{ .Release.Namespace }}
   - name: ASTRONOMER__AIRFLOW__WORKER_LOG_RETENTION
     value: "15"
   # Dynamically created secret envs
@@ -54,14 +54,6 @@
         name: {{ template "fernet_key_secret" . }}
         key: fernet-key
 {{- end }}
-
-{{- define "namespace" -}}
-{{- if and .Values.platform.namespace -}}
-{{- printf "%s-%s" .Values.platform.namespace .Release.Name -}}
-{{- else -}}
-{{- .Release.Namespace }}
-{{- end -}}
-{{- end -}}
 
 {{ define "airflow_url" -}}
 {{ .Release.Name }}-airflow.{{ .Values.ingress.baseDomain }}

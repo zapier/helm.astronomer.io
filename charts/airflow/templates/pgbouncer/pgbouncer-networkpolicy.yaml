@@ -6,7 +6,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: {{ .Release.Name }}-pgbouncer-policy
-  namespace: {{ include "namespace" . }}
   labels:
     tier: airflow
     component: airflow-pgbouncer-policy

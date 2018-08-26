@@ -5,7 +5,6 @@ kind: Deployment
 apiVersion: apps/v1beta2
 metadata:
   name: {{ .Release.Name }}-scheduler
-  namespace: {{ include "namespace" . }}
   labels:
     tier: airflow
     component: scheduler
