@@ -180,8 +180,8 @@ pgbouncer:
   enabled: false
 
   # Pool sizes
-  metadataPoolSize: 2
-  resultBackendPoolSize: 1
+  metadataPoolSize: 3
+  resultBackendPoolSize: 2
 
   resources: {}
     # limits:
