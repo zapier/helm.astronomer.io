@@ -11,7 +11,7 @@ metadata:
     tier: airflow
     component: pgbouncer
     release: {{ .Release.Name }}
-    workspace: {{ .Values.workspace }}
+    workspace: {{ .Values.platform.workspace | quote }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     heritage: {{ .Release.Service }}
 spec:
@@ -20,6 +20,6 @@ spec:
       tier: airflow
       component: pgbouncer
       release: {{ .Release.Name }}
-      workspace: {{ .Values.workspace }}
+      workspace: {{ .Values.platform.workspace | quote }}
 {{ toYaml .Values.scheduler.podDisruptionBudget | indent 2 }}
 {{- end }}

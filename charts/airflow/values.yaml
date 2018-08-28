@@ -240,3 +240,4 @@ limits: {}
 # This chart is completely deployable without specifying these values.
 platform:
   release: ~
+  workspace: ""

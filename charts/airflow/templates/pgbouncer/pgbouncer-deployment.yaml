@@ -10,7 +10,7 @@ metadata:
     tier: airflow
     component: pgbouncer
     release: {{ .Release.Name }}
-    workspace: {{ .Values.workspace }}
+    workspace: {{ .Values.platform.workspace | quote }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     heritage: {{ .Release.Service }}
 spec:
@@ -23,14 +23,14 @@ spec:
       tier: airflow
       component: pgbouncer
       release: {{ .Release.Name }}
-      workspace: {{ .Values.workspace }}
+      workspace: {{ .Values.platform.workspace | quote }}
   template:
     metadata:
       labels:
         tier: airflow
         component: pgbouncer
         release: {{ .Release.Name }}
-        workspace: {{ .Values.workspace }}
+        workspace: {{ .Values.platform.workspace | quote }}
       annotations:
         checksum/pgbouncer-config-secret: {{ include (print $.Template.BasePath "/secrets/pgbouncer-config-secret.yaml") . | sha256sum }} 
     spec:

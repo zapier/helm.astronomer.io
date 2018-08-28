@@ -10,7 +10,7 @@ metadata:
     tier: airflow
     component: pgbouncer
     release: {{ .Release.Name }}
-    workspace: {{ .Values.workspace }}
+    workspace: {{ .Values.platform.workspace | quote }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     heritage: {{ .Release.Service }}
   annotations:
@@ -25,7 +25,7 @@ spec:
     tier: airflow
     component: pgbouncer
     release: {{ .Release.Name }}
-    workspace: {{ .Values.workspace }}
+    workspace: {{ .Values.platform.workspace | quote }}
   ports:
     - name: pgbouncer
       protocol: TCP

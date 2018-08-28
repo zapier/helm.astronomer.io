@@ -10,7 +10,7 @@ metadata:
     tier: airflow
     component: worker
     release: {{ .Release.Name }}
-    workspace: {{ .Values.workspace }}
+    workspace: {{ .Values.platform.workspace | quote }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     heritage: {{ .Release.Service }}
 spec:
@@ -22,14 +22,14 @@ spec:
       tier: airflow
       component: worker
       release: {{ .Release.Name }}
-      workspace: {{ .Values.workspace }}
+      workspace: {{ .Values.platform.workspace | quote }}
   template:
     metadata:
       labels:
         tier: airflow
         component: worker
         release: {{ .Release.Name }}
-        workspace: {{ .Values.workspace }}
+        workspace: {{ .Values.platform.workspace | quote }}
       annotations:
         checksum/metadata-secret: {{ include (print $.Template.BasePath "/secrets/metadata-connection-secret.yaml") . | sha256sum }}
         checksum/result-backend-secret: {{ include (print $.Template.BasePath "/secrets/result-backend-connection-secret.yaml") . | sha256sum }}

@@ -10,7 +10,7 @@ metadata:
     tier: airflow
     component: airflow-scheduler-policy
     release: {{ .Release.Name }}
-    workspace: {{ .Values.workspace }}
+    workspace: {{ .Values.platform.workspace | quote }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     heritage: {{ .Release.Service }}
 spec:
@@ -19,6 +19,7 @@ spec:
       tier: airflow
       component: scheduler
       release: {{ .Release.Name }}
+      workspace: {{ .Values.platform.workspace | quote }}
   policyTypes:
   - Ingress
 {{- if (or (eq .Values.executor "LocalExecutor") (eq .Values.executor "SequentialExecutor")) }}
@@ -27,8 +28,9 @@ spec:
     - podSelector:
         matchLabels:
           tier: airflow
-          release: {{ .Release.Name }}
           component: webserver
+          release: {{ .Release.Name }}
+          workspace: {{ .Values.platform.workspace | quote }}
     ports:
     - protocol: TCP
       port: {{ .Values.ports.workerLogs }}

@@ -10,7 +10,7 @@ metadata:
     tier: airflow
     component: airflow-flower-policy
     release: {{ .Release.Name }}
-    workspace: {{ .Values.workspace }}
+    workspace: {{ .Values.platform.workspace | quote }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     heritage: {{ .Release.Service }}
 spec:
@@ -19,6 +19,7 @@ spec:
       tier: airflow
       component: flower
       release: {{ .Release.Name }}
+      workspace: {{ .Values.platform.workspace | quote }}
   policyTypes:
   - Ingress
 {{- if .Values.platform.release }}
