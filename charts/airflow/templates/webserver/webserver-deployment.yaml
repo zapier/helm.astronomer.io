@@ -27,6 +27,9 @@ spec:
         component: webserver
         release: {{ .Release.Name }}
         workspace: {{ .Values.workspace }}
+      annotations:
+        checksum/metadata-secret: {{ include (print $.Template.BasePath "/secrets/metadata-connection-secret.yaml") . | sha256sum }} 
+        checksum/pgbouncer-config-secret: {{ include (print $.Template.BasePath "/secrets/pgbouncer-config-secret.yaml") . | sha256sum }} 
     spec:
       restartPolicy: Always
       securityContext:

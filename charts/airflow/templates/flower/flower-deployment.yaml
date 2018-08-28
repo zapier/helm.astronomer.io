@@ -1,8 +1,9 @@
 ################################
 ## Airflow Flower Deployment
 #################################
+{{- if eq .Values.executor "CeleryExecutor" }}
 kind: Deployment
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 metadata:
   name: {{ .Release.Name }}-flower
   labels:
@@ -60,3 +61,4 @@ spec:
             periodSeconds: 5
           env:
           {{- include "airflow_environment" . | indent 10 }}
+{{- end }}

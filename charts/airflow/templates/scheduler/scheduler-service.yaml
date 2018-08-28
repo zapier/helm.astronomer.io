@@ -1,28 +1,28 @@
 ################################
-## Airflow Redis Service
+## Airflow Scheduler Service
 #################################
-{{- if eq .Values.executor "CeleryExecutor" }}
+{{- if (or (eq .Values.executor "LocalExecutor") (eq .Values.executor "SequentialExecutor")) }}
 kind: Service
 apiVersion: v1
 metadata:
-  name: {{ .Release.Name }}-redis
+  name: {{ .Release.Name }}-scheduler
   labels:
     tier: airflow
-    component: redis
+    component: scheduler
     release: {{ .Release.Name }}
     workspace: {{ .Values.workspace }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     heritage: {{ .Release.Service }}
 spec:
-  type: ClusterIP
+  clusterIP: None
   selector:
     tier: airflow
-    component: redis
+    component: scheduler
     release: {{ .Release.Name }}
     workspace: {{ .Values.workspace }}
   ports:
-    - name: redis-db
+    - name: task-logs
       protocol: TCP
-      port: {{ .Values.ports.redisDB }}
-      targetPort: {{ .Values.ports.redisDB }}
+      port: {{ .Values.ports.workerLogs }}
+      targetPort: {{ .Values.ports.workerLogs }}
 {{- end }}

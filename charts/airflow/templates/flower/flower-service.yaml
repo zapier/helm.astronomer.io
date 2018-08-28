@@ -1,6 +1,7 @@
 ################################
 ## Airflow Flower Service Component
 #################################
+{{- if eq .Values.executor "CeleryExecutor" }}
 kind: Service
 apiVersion: v1
 metadata:
@@ -24,3 +25,4 @@ spec:
       protocol: TCP
       port: {{ .Values.ports.flowerUI }}
       targetPort: {{ .Values.ports.flowerUI }}
+{{- end }}

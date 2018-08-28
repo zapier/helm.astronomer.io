@@ -1,5 +1,5 @@
 ################################
-## Worker Role
+## Airflow Worker Role
 #################################
 {{- if .Values.rbacEnabled }}
 kind: Role

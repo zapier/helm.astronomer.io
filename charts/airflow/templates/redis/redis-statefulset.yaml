@@ -1,6 +1,7 @@
 ################################
 ## Airflow Redis StatefulSet
 #################################
+{{- if eq .Values.executor "CeleryExecutor" }}
 kind: StatefulSet
 apiVersion: apps/v1beta2
 metadata:
@@ -63,4 +64,5 @@ spec:
         resources:
           requests:
             storage: {{ .Values.redis.persistence.size }}
+{{- end }}
 {{- end }}

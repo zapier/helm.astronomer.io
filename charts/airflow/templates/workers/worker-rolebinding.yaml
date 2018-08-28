@@ -1,5 +1,5 @@
 ################################
-## Worker Role Binding
+## Airflow Worker Role Binding
 #################################
 {{- if .Values.rbacEnabled }}
 kind: RoleBinding

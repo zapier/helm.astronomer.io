@@ -1,6 +1,7 @@
 ################################
 ## Airflow Worker Service
 #################################
+{{- if eq .Values.executor "CeleryExecutor" }}
 kind: Service
 apiVersion: v1
 metadata:
@@ -21,4 +22,7 @@ spec:
     workspace: {{ .Values.workspace }}
   ports:
     - name: worker-logs
+      protocol: TCP
       port: {{ .Values.ports.workerLogs }}
+      targetPort: {{ .Values.ports.workerLogs }}
+{{- end }}

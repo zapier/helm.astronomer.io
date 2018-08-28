@@ -1,7 +1,7 @@
 ################################
-## Redis NetworkPolicy
+## Airflow Redis NetworkPolicy
 #################################
-{{- if .Values.networkPolicies.enabled }}
+{{- if (and .Values.networkPolicies.enabled (eq .Values.executor "CeleryExecutor")) }}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
