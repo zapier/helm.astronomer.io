@@ -9,12 +9,12 @@ metadata:
   labels:
     component: kube-state
     tier: astronomer
-    release: {{ . Release.Name }}
+    release: {{ .Release.Name }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     heritage: {{ .Release.Service }}
   annotations:
     prometheus.io./scrape: "true"
-    prometheus.io/port: {{ .Values.ports.kube-stateScrape}}
+    prometheus.io/port: {{ .Values.ports.kubestateScrape}}
   spec:
     type: NodePort
     selector:
@@ -23,10 +23,10 @@ metadata:
       release: {{ .Release.Name }}
     ports:
       - name: http-metrics
-        port: {{ .Values.ports.kube-stateHTTP }}
-        targetPort: {{ .Values.ports.kube-stateHTTP }}
+        port: {{ .Values.ports.kubestateHTTP }}
+        targetPort: {{ .Values.ports.kubestateHTTP }}
         protrocol: TCP
       - name: telemetry
-        port: {{ .Values.ports.kube-stateScrape }}
-        targetPort: {{ .Values.ports.kube-stateScrape }}
+        port: {{ .Values.ports.kubestateScrape }}
+        targetPort: {{ .Values.ports.kubestateScrape }}
         protocol: TCP

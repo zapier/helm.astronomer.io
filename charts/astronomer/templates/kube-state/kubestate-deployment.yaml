@@ -33,26 +33,26 @@ spec:
         - name: {{ .Release.Name }}-kube-state
           image: {{- include "kube-state_image" . | indent 1 }}
           resources:
-{{ to Yaml .Values.kube-state.resources | indent 12 }}
+{{ toYaml .Values.kubestate.resources | indent 12 }}
           ports:
             - name: kube-state-http
-              containerPort: {{ .Values.ports.kube-stateHTTP }}
+              containerPort: {{ .Values.ports.kubestateHTTP }}
             -name: kube-state-telemetry
-              containerPort: {{ .Values.ports.kube-stateTelemetry }}
+              containerPort: {{ .Values.ports.kubestateTelemetry }}
             livenessProbe:
               httpGet:
                 path: /healthz
-                port: {{ .Values.ports.kube-stateHTTP }}
+                port: {{ .Values.ports.kubestateHTTP }}
               initialDelaySeconds: 10
               periodSeconds: 10
             readinessProbe:
               httpGet:
                 path: /healthz
-                port: {{ .Values.ports.kube-stateHTTP }}
+                port: {{ .Values.ports.kubestateHTTP }}
               initialDelaySeconds: 10
               periodSeconds: 10
             env:
-              {{- range $i, $config := .Values.kube-state.env }}
+              {{- range $i, $config := .Values.kubestate.env }}
               - name: {{ $config.name }}
                 value: {{ $config.value | quote }}
               {{- end }}
