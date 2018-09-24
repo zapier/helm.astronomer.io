@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/vi
+kind: RoleBinding
+metadata:
+  name: kube-state
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: kube-state-metrics-resizer
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}-kube-state
+    namespace: {{ .Release.Namespace }}

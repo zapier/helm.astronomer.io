@@ -5,13 +5,13 @@
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ .Release.Name }}-kubestate-tiller
+  name: {{ .Release.Name }}-kube-state-tiller
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: cluster-admin
 subjects:
   - kind: ServiceAccount
-    name: {{ .Release.Name }}-kubestate
+    name: {{ .Release.Name }}-kube-state
     namespace: {{ .Release.Namespace }}
 {{- end }}
