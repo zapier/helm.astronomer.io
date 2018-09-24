@@ -38,6 +38,10 @@
 {{ .Values.images.cliInstall.name }}:{{ or .Values.global.imageTag .Values.images.cliInstall.tag }}
 {{- end }}
 
+{{ define "kubestate_image" -}}
+{{ .Values.images.kubestate.name }}:{{ or .Values.global.imageTag .Values.images.kubestate.tag }}
+{{- end }}
+
 {{ define "registry_docker_config" -}}
   {{- $domain := printf "registry.%v" .Values.global.baseDomain }}
   {{- $email := printf "admin@%v" .Values.global.baseDomain }}

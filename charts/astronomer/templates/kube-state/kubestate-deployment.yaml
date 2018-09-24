@@ -31,7 +31,7 @@ spec:
         runAsUser: {{ .Values.uid }}
       containers:
         - name: {{ .Release.Name }}-kube-state
-          image: {{- include "kube-state_image" . | indent 1 }}
+          image: {{- include "kubestate_image" . | indent 1 }}
           resources:
 {{ toYaml .Values.kubestate.resources | indent 12 }}
           ports:
