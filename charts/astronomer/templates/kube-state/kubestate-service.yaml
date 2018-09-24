@@ -1,0 +1,32 @@
+########################################
+## Airflow Kube-State Service
+########################################
+kind: Service
+apiVersion: v1
+
+metadata:
+  name: {{ .Release.Name }}-kube-state
+  labels:
+    component: kube-state
+    tier: astronomer
+    release: {{ . Release.Name }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    heritage: {{ .Release.Service }}
+  annotations:
+    prometheus.io./scrape: "true"
+    prometheus.io/port: {{ .Values.ports.kube-stateScrape}}
+  spec:
+    type: NodePort
+    selector:
+      tier: astronomer
+      component: kube-state
+      release: {{ .Release.Name }}
+    ports:
+      - name: http-metrics
+        port: {{ .Values.ports.kube-stateHTTP }}
+        targetPort: {{ .Values.ports.kube-stateHTTP }}
+        protrocol: TCP
+      - name: telemetry
+        port: {{ .Values.ports.kube-stateScrape }}
+        targetPort: {{ .Values.ports.kube-stateScrape }}
+        protocol: TCP

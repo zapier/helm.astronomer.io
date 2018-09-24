@@ -1,0 +1,70 @@
+##############################################
+## Airflow Kube-State Deployment
+##############################################
+kind: Deployment
+apiVersion: apps/v1beta2
+metadata:
+  name: {{ .Release.Name }}-kube-state
+  labels:
+    tier: astronomer
+    component: kube-state
+    release: {{ .Release.Name }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: astronomer
+      component: kube-state
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        tier: astronomer
+        component: kube-state
+        release: {{ .Release.Name }}
+    spec:
+      serviceAccountName: {{ .Release.Name }}-kube-state
+      restartPolicy: Always
+      securityContext:
+        runAsUser: {{ .Values.uid }}
+      containers:
+        - name: {{ .Release.Name }}-kube-state
+          image: {{- include "kube-state_image" . | indent 1 }}
+          resources:
+{{ to Yaml .Values.kube-state.resources | indent 12 }}
+          ports:
+            - name: kube-state-http
+              containerPort: {{ .Values.ports.kube-stateHTTP }}
+            -name: kube-state-telemetry
+              containerPort: {{ .Values.ports.kube-stateTelemetry }}
+            livenessProbe:
+              httpGet:
+                path: /healthz
+                port: {{ .Values.ports.kube-stateHTTP }}
+              initialDelaySeconds: 10
+              periodSeconds: 10
+            readinessProbe:
+              httpGet:
+                path: /healthz
+                port: {{ .Values.ports.kube-stateHTTP }}
+              initialDelaySeconds: 10
+              periodSeconds: 10
+            env:
+              {{- range $i, $config := .Values.kube-state.env }}
+              - name: {{ $config.name }}
+                value: {{ $config.value | quote }}
+              {{- end }}
+              - name: KUBESTATE_HTTP_PORT
+                value: "8880"
+              - name: KUBESTATE_TELEMETRY_PORT
+                value: "50051"
+              - name: KUBESTATE_PLATFORM_NAMESPACE
+                value: {{ .Release.Namespace }}
+              - name: KUBESTATE_PLATFORM_RELEASE
+                value: {{ .Release.Name }}
+              - name: KUBESTATE_HELM_REPO
+                value: {{ .Values.global.helmRepo }}
+              - name: HELM_HOST
+                value: {{ .Values.global.helmHost }}
