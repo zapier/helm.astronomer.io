@@ -4,7 +4,7 @@
 global:
   # Base domain for all subdomains exposed through ingress
   baseDomain: ~
-
+  
   # Use kube-lego
   acme: false
 
@@ -50,6 +50,10 @@ global:
 
     # Enable Prometheus module
     prometheus:
+      enabled: true
+
+    # Enable kube-state module
+    kubeState:
       enabled: true
 
 #################################

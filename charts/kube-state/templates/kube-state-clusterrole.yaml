@@ -1,7 +1,8 @@
 apiVersion: rbac.authorization.k8s.io/v1
+# kubernetes versions before 1.8.0 should use rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
-  name: {{ .Release.Name }}-kube-state-tiller
+  name: {{ template "kube-state.fullname" . }}
 rules:
 - apiGroups: [""]
   resources:
