@@ -52,6 +52,14 @@ global:
     prometheus:
       enabled: true
 
+    # Enable Elasticsearch module
+    elasticsearch:
+      enabled: true
+
+    # Enable Fluentd module
+    # fluentd:
+    #   enabled: true
+
 #################################
 ## Astronomer configuration
 #################################
