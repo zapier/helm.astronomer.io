@@ -3,7 +3,7 @@
 #################################
 global:
   # Base domain for all subdomains exposed through ingress
-  baseDomain: false
+  baseDomain: ~
 
   # Use kube-lego
   acme: false
@@ -32,17 +32,17 @@ global:
   # Astronomer modules
   modules:
 
-    # Enable astronomer module
-    astronomer:
-      enabled: true
-
     # Enable airflow module
     airflow:
       enabled: false
 
-    # Enable NGINX ingress module (controlled by baseDomain currently)
-    # nginx:
-    #   enabled: true
+    # Enable astronomer module
+    astronomer:
+      enabled: true
+
+    # Enable NGINX ingress module
+    nginx:
+      enabled: true
 
     # Enable Grafana module
     grafana:
@@ -65,49 +65,93 @@ global:
       enabled: true
 
 #################################
+## Astronomer configuration
+#################################
+astronomer:
+  orbit:
+    resources:
+      limits:
+        cpu: "500m"
+        memory: "1024Mi"
+      requests:
+        cpu: "100m"
+        memory: "256Mi"
+
+  houston:
+    resources:
+      limits:
+        cpu: "500m"
+        memory: "1024Mi"
+      requests:
+        cpu: "250m"
+        memory: "512Mi"
+
+  commander:
+    resources:
+      limits:
+        cpu: "500m"
+        memory: "1024Mi"
+      requests:
+        cpu: "250m"
+        memory: "512Mi"
+
+  registry:
+    resources:
+      limits:
+        cpu: "500m"
+        memory: "1024Mi"
+      requests:
+        cpu: "250m"
+        memory: "512Mi"
+
+  install:
+    resources:
+      limits:
+        cpu: "500m"
+        memory: "1024Mi"
+      requests:
+        cpu: "100m"
+        memory: "256Mi"
+
+#################################
 ## Nginx configuration
 #################################
 nginx:
+  resources:
+    limits:
+      cpu: "1"
+      memory: "2048Mi"
+    requests:
+      cpu: "500m"
+      memory: "1024Mi"
+
   # IP address the nginx ingress should bind to
   loadBalancerIP:
 
   # Used to restrict IPs which can reach the nginx ingress
   loadBalancerSourceRanges:
 
-#################################
-## Airflow configuration
-#################################
-airflow:
-  # Worker settings
-  workers:
-    # Enable persistence to keep logs around between deploys
-    persistence:
-      enabled: true
-      size: 10Gi
-      # If using a custom storageClass, pass name ref to all statefulSets here
-      storageClassName:
-  prometheus:
-    persistence:
-      enabled: true
-      size: 50Gi
-      # If using a custom storageClass, pass name ref to all statefulSets here
-      storageClassName:
 
 #################################
-## Astronomer configuration
+## Grafana configuration
 #################################
-astronomer:
-  registry:
-    # Enable persistence to keep registry data between deploys
-    persistence:
-      enabled: true
-      size: 50Gi
-      # If using a custom storageClass, pass name ref to all statefulSets here
-      storageClassName:
-  auth:
-    local:
-      enabled: true
-    google:
-      enabled: false
-      clientId: ~
-      clientSecret: ~
+grafana:
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "1024Mi"
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+
+#################################
+## Prometheus configuration
+#################################
+prometheus:
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "1024Mi"
+    requests:
+      cpu: "250m"
+      memory: "512Mi"

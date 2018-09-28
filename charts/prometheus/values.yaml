@@ -4,18 +4,25 @@
 
 images:
   prometheus:
-    name: astronomerinc/ap-prometheus
-    tag: 0.3.2
+    repository: astronomerinc/ap-prometheus
+    tag: 0.6.1
+    pullPolicy: IfNotPresent
+
+resources: {}
+#  limits:
+#   cpu: 100m
+#   memory: 128Mi
+#  requests:
+#   cpu: 100m
+#   memory: 128Mi
 
 dataDir: "/prometheus"
 
 # Enable persistence for Prometheus
 persistence:
   enabled: true
-  size: 50Gi
+  size: 100Gi
   # If using a custom storageClass, pass name ref to all statefulSets here
   storageClassName:
-
-workspace: default
 
 port: 9090

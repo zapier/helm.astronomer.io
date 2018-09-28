@@ -31,6 +31,7 @@ spec:
       initContainers:
         - name: "{{ .Release.Name }}-houston-bootstrapper"
           image: {{- include "db_bootstrapper_image" . | indent 1 }}
+          imagePullPolicy: {{ .Values.images.dbBootstrapper.pullPolicy }}
           env:
             - name: BOOTSTRAP_DB
               valueFrom:
@@ -51,6 +52,9 @@ spec:
       containers:
         - name: {{ .Release.Name }}-houston
           image: {{- include "houston_image" . | indent 1 }}
+          imagePullPolicy: {{ .Values.images.houston.pullPolicy }}
+          resources:
+{{ toYaml .Values.commander.resources | indent 12 }}
           {{- if .Values.global.tlsSecret }}
           volumeMounts:
             - name: registry-tls-volume
@@ -98,17 +102,20 @@ spec:
               value: "{{ .Release.Name }}-commander"
             - name: COMMANDER_PORT
               value: "50051"
-            - name: GOOGLE_OAUTH_REDIRECT_URL
-              value: "https://app.{{ .Values.global.baseDomain }}/oauth/google"
             - name: GOOGLE_CLIENT_ID
               value: {{ .Values.auth.google.clientId }}
-            {{- if .Values.auth.google.enabled }}
-            - name: GOOGLE_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Release.Name }}-google-client-secret
-                  key: clientSecret
-            {{- end }}
+            - name: AUTH0_CUSTOM
+              value: {{ ne .Values.auth.auth0.baseDomain "astronomerio.auth0.com" | quote }}
+            - name: AUTH0_CLIENT_ID
+              value: {{ .Values.auth.auth0.clientId }}
+            - name: AUTH0_BASE_DOMAIN
+              value: {{ .Values.auth.auth0.baseDomain }}
+            - name: AUTH0_EXTERNAL_AUTH
+              value: {{ .Values.auth.auth0.externalLogin | quote }}
+            - name: BASE_URL_ORBIT
+              value: "app.{{ .Values.global.baseDomain }}"
+            - name: BASE_URL_HOUSTON
+              value: "houston.{{ .Values.global.baseDomain }}"
             - name: REGISTRY_CERT_PATH
               value: "/etc/houston/tls/"
             - name: REGISTRY_ISSUER
@@ -137,6 +144,13 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.data.airflowDatabaseSecret }}
                   key: connection
+            {{- if .Values.smtp.uri }}
+            - name: SMTP_URI
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-houston-smtp-uri
+                  key: connection
+            {{- end }}
     {{ if .Values.global.tlsSecret }}
       volumes:
         - name: registry-tls-volume

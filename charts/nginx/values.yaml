@@ -3,11 +3,24 @@
 # Declare variables to be passed into your templates.
 images:
   nginx:
-    name: astronomerinc/ap-nginx
-    tag: 0.3.2
+    repository: astronomerinc/ap-nginx
+    tag: 0.6.1
+    pullPolicy: IfNotPresent
   defaultBackend:
-    name: astronomerinc/ap-default-backend
-    tag: 0.3.2
+    repository: astronomerinc/ap-default-backend
+    tag: 0.6.1
+    pullPolicy: IfNotPresent
+
+forceNamespaceIsolation: true
+ingressClass: ~
+
+resources: {}
+#  limits:
+#   cpu: 100m
+#   memory: 128Mi
+#  requests:
+#   cpu: 100m
+#   memory: 128Mi
 
 # AntiAffinity can be "hard" or "soft"
 antiAffinity: "soft"
@@ -27,6 +40,9 @@ proxySendTimeout: 600
 proxyBodySize: "512m"
 hstsIncludeSubdomains: false
 serverNameHashBucketSize: 256
-# Restrict nginx to only watching for ingress on the helm release namespace
-watchReleaseNamespace: true
-forceNamespaceIsolation: true
+
+ports:
+  http: 80
+  https: 443
+  healthz: 10254
+  metrics: 10254

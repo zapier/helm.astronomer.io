@@ -34,6 +34,7 @@ spec:
       initContainers:
         - name: "{{ .Release.Name }}-grafana-bootstrapper"
           image: {{- include "db_bootstrapper_image" . | indent 1 }}
+          imagePullPolicy: {{ .Values.images.dbBootstrapper.pullPolicy }}
           env:
             - name: BOOTSTRAP_DB
               valueFrom:
@@ -52,21 +53,27 @@ spec:
       containers:
         - name: "{{ .Release.Name }}-grafana"
           image: {{- include "grafana_image" . | indent 1 }}
+          imagePullPolicy: {{ .Values.images.grafana.pullPolicy }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
           ports:
             - name: grafana-ui
               containerPort: {{ .Values.ports.http }}
           livenessProbe:
             httpGet:
-              path: /
-              port: {{ .Values.ports.http }}
+              path: /api/health
+              port: {{ .Values.port }}
             initialDelaySeconds: 10
             periodSeconds: 10
           readinessProbe:
             httpGet:
-              path: /
-              port: {{ .Values.ports.http }}
+              path: /api/health
+              port: {{ .Values.port }}
             initialDelaySeconds: 10
             periodSeconds: 10
+          volumeMounts:
+            - name: grafana-datasource-volume
+              mountPath: /etc/grafana/provisioning/datasources
           env:
             - name: GF_DATABASE_URL
               valueFrom:
@@ -75,5 +82,10 @@ spec:
                   key: connection
             - name: GF_AUTH_ANONYMOUS_ENABLED
               value: "true"
-            - name: ASTRO_DEFAULT_PROMETHEUS_HOST
-              value: "http://{{ .Release.Name }}-prometheus:9090"
+      volumes:
+        - name: grafana-datasource-volume
+          configMap:
+            name: "{{ .Release.Name }}-grafana-datasource"
+            items:
+              - key: datasource.yaml
+                path: datasource.yaml

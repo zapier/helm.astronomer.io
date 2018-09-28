@@ -2,14 +2,15 @@
 ## Airflow Webserver Deployment
 #################################
 kind: Deployment
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 metadata:
   name: {{ .Release.Name }}-webserver
   labels:
     tier: airflow
     component: webserver
     release: {{ .Release.Name }}
-    workspace: {{ .Values.workspace }}
+    platform: {{ .Values.platform.release }}
+    workspace: {{ .Values.platform.workspace | quote }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     heritage: {{ .Release.Service }}
 spec:
@@ -19,40 +20,50 @@ spec:
       tier: airflow
       component: webserver
       release: {{ .Release.Name }}
-      workspace: {{ .Values.workspace }}
+      platform: {{ .Values.platform.release }}
+      workspace: {{ .Values.platform.workspace | quote }}
   template:
     metadata:
       labels:
         tier: airflow
         component: webserver
         release: {{ .Release.Name }}
-        workspace: {{ .Values.workspace }}
+        platform: {{ .Values.platform.release }}
+        workspace: {{ .Values.platform.workspace | quote }}
+      annotations:
+        checksum/metadata-secret: {{ include (print $.Template.BasePath "/secrets/metadata-connection-secret.yaml") . | sha256sum }} 
+        checksum/pgbouncer-config-secret: {{ include (print $.Template.BasePath "/secrets/pgbouncer-config-secret.yaml") . | sha256sum }} 
     spec:
       restartPolicy: Always
       securityContext:
         runAsUser: {{ .Values.uid }}
-      {{- if .Values.global.registryAuthSecret }}
+      {{- if or .Values.registry.secretName .Values.registry.connection }}
       imagePullSecrets:
-        - name: {{ .Values.global.registryAuthSecret }}
+        - name: {{ template "registry_secret" . }}
       {{- end }}
       containers:
         - name: {{ .Release.Name }}-webserver
           image: {{- include "airflow_image" . | indent 1 }}
+          imagePullPolicy: {{ .Values.images.airflow.pullPolicy }}
           args: ["airflow", "webserver"]
+          resources:
+{{ toYaml .Values.webserver.resources | indent 12 }}
           ports:
             - name: webserver-ui
               containerPort: {{ .Values.ports.airflowUI }}
           livenessProbe:
+            failureThreshold: 10
             httpGet:
-              path: /admin/
+              path: /health
               port: {{ .Values.ports.airflowUI }}
             initialDelaySeconds: 10
-            periodSeconds: 10
+            periodSeconds: 5
           readinessProbe:
+            failureThreshold: 10
             httpGet:
-              path: /admin/
+              path: /health
               port: {{ .Values.ports.airflowUI }}
             initialDelaySeconds: 10
-            periodSeconds: 10
+            periodSeconds: 5
           env:
           {{- include "airflow_environment" . | indent 10 }}

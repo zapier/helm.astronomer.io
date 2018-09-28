@@ -1,6 +1,7 @@
 ################################
 ## Airflow Redis StatefulSet
 #################################
+{{- if eq .Values.executor "CeleryExecutor" }}
 kind: StatefulSet
 apiVersion: apps/v1beta2
 metadata:
@@ -9,7 +10,8 @@ metadata:
     tier: airflow
     component: redis
     release: {{ .Release.Name }}
-    workspace: {{ .Values.workspace }}
+    platform: {{ .Values.platform.release }}
+    workspace: {{ .Values.platform.workspace | quote }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     heritage: {{ .Release.Service }}
 spec:
@@ -19,19 +21,24 @@ spec:
       tier: airflow
       component: redis
       release: {{ .Release.Name }}
-      workspace: {{ .Values.workspace }}
+      platform: {{ .Values.platform.release }}
+      workspace: {{ .Values.platform.workspace | quote }}
   template:
     metadata:
       labels:
         tier: airflow
         component: redis
         release: {{ .Release.Name }}
-        workspace: {{ .Values.workspace }}
+        platform: {{ .Values.platform.release }}
+        workspace: {{ .Values.platform.workspace | quote }}
     spec:
       containers:
         - name: {{ .Release.Name }}-redis
           image: {{- include "redis_image" . | indent 1 }}
+          imagePullPolicy: {{ .Values.images.redis.pullPolicy }}
           command: ["/bin/sh"]
+          resources:
+{{ toYaml .Values.redis.resources | indent 12 }}
           args: ["-c", "redis-server --requirepass ${REDIS_PASSWORD}"]
           ports:
             - name: redis-db
@@ -61,4 +68,5 @@ spec:
         resources:
           requests:
             storage: {{ .Values.redis.persistence.size }}
+{{- end }}
 {{- end }}

@@ -1,10 +1,12 @@
 {{ define "helm_globals" -}}
   {{- $globals := dict -}}
-  {{- $_ := set $globals "baseDomain" .Values.global.baseDomain -}}
+  {{- $_ := set $globals "baseDomain" (default "" .Values.global.baseDomain) -}}
   {{- $_ := set $globals "registryAuthSecret" .Values.global.registryAuthSecret -}}
   {{- $_ := set $globals "acme" (.Values.global.acme) -}}
   {{- $_ := set $globals "rbacEnabled" .Values.global.rbacEnabled -}}
-  {{- $_ := set $globals "tlsSecret" (print .Values.global.tlsSecret | toString | replace "<nil>" "") -}}
+  {{- $_ := set $globals "releaseName" (print .Release.Name | toString) -}}
+  {{- $_ := set $globals "releaseNamespace" (print .Release.Namespace | toString) -}}
+  {{- $_ := set $globals "releaseVersion" (print .Chart.Version | toString) -}}
   {{ $globals | toJson | print }}
 {{- end }}
 
@@ -13,23 +15,27 @@
 {{- end }}
 
 {{ define "commander_image" -}}
-{{ .Values.images.commander.name }}:{{ or .Values.global.imageTag .Values.images.commander.tag }}
+{{ .Values.images.commander.repository }}:{{ .Values.images.commander.tag }}
 {{- end }}
 
 {{ define "houston_image" -}}
-{{ .Values.images.houston.name }}:{{ or .Values.global.imageTag .Values.images.houston.tag }}
+{{ .Values.images.houston.repository }}:{{ .Values.images.houston.tag }}
 {{- end }}
 
 {{ define "orbit_image" -}}
-{{ .Values.images.orbit.name }}:{{ or .Values.global.imageTag .Values.images.orbit.tag }}
+{{ .Values.images.orbit.repository }}:{{ .Values.images.orbit.tag }}
 {{- end }}
 
 {{ define "registry_image" -}}
-{{ .Values.images.registry.name }}:{{ or .Values.global.imageTag .Values.images.registry.tag }}
+{{ .Values.images.registry.repository }}:{{ .Values.images.registry.tag }}
 {{- end }}
 
 {{ define "db_bootstrapper_image" -}}
-{{ .Values.images.bootstrapper.name }}:{{ or .Values.global.imageTag .Values.images.bootstrapper.tag }}
+{{ .Values.images.dbBootstrapper.repository }}:{{ .Values.images.dbBootstrapper.tag }}
+{{- end }}
+
+{{ define "cli_install_image" -}}
+{{ .Values.images.cliInstall.repository }}:{{ .Values.images.cliInstall.tag }}
 {{- end }}
 
 {{ define "registry_docker_config" -}}
@@ -56,5 +62,11 @@
   {{- end -}}
   {{- if or .Values.auth.google.enabled -}}
     google_oauth,
+  {{- end -}}
+  {{- if or .Values.auth.auth0.enabled -}}
+    auth0_oauth,
+  {{- end -}}
+  {{- if or .Values.auth.github.enabled -}}
+    github_oauth,
   {{- end -}}
 {{- end }}

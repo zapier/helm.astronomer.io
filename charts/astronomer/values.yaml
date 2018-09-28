@@ -8,20 +8,29 @@ uid: 100
 # Images for pilot
 images:
   commander:
-    name: astronomerinc/ap-commander
-    tag: 0.3.2
+    repository: astronomerinc/ap-commander
+    tag: 0.6.1
+    pullPolicy: IfNotPresent
   registry:
-    name: astronomerinc/ap-registry
-    tag: 0.3.2
+    repository: astronomerinc/ap-registry
+    tag: 0.6.1
+    pullPolicy: IfNotPresent
   houston:
-    name: astronomerinc/ap-houston-api
-    tag: 0.3.2
+    repository: astronomerinc/ap-houston-api
+    tag: 0.6.1
+    pullPolicy: IfNotPresent
   orbit:
-    name: astronomerinc/ap-orbit-ui
-    tag: 0.3.2
-  bootstrapper:
-    name: astronomerinc/ap-db-bootstrapper
-    tag: 0.3.2
+    repository: astronomerinc/ap-orbit-ui
+    tag: 0.6.1
+    pullPolicy: IfNotPresent
+  dbBootstrapper:
+    repository: astronomerinc/ap-db-bootstrapper
+    tag: 0.6.1
+    pullPolicy: IfNotPresent
+  cliInstall:
+    repository: astronomerinc/ap-cli-install
+    tag: 0.6.1
+    pullPolicy: IfNotPresent
 
 # Astronomer platform config
 data:
@@ -30,30 +39,82 @@ data:
 
 bootstrapDatabase: true
 
+smtp:
+  uri: ~
+
 auth:
   local:
     enabled: true
   google:
-    enabled: false
+    enabled: true
     clientId: ~
-    clientSecret: ~
+  auth0:
+    enabled: true
+    clientId: "rH2L4yKctlepniTyJW3MkuXuTreOHHn1"
+    baseDomain: "astronomerio.auth0.com"
+    externalLogin: false
+  github:
+    enabled: true
+
+orbit:
+  env: {}
+  resources: {}
+  #  limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  #  requests:
+  #   cpu: 100m
+  #   memory: 128Mi
 
 houston:
-  env:
+  env: {}
+  resources: {}
+  #  limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  #  requests:
+  #   cpu: 100m
+  #   memory: 128Mi
 
 commander:
-  env:
+  env: {}
+  resources: {}
+   # limits:
+   #  cpu: 100m
+   #  memory: 128Mi
+   # requests:
+   #  cpu: 100m
+   #  memory: 128Mi
 
 registry:
-  # Enable persistence to keep registry data between deploys
+  resources: {}
+  #  limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  #  requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
   persistence:
+    # Enable persistent storage
     enabled: true
-    size: 50Gi
+    # Size of volume to provision
+    size: 100Gi
     # If using a custom storageClass, pass name ref to all statefulSets here
     storageClassName:
+
   auth:
     service: "docker-registry"
     issuer: "houston"
+
+install:
+  resources: {}
+  #  limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  #  requests:
+  #   cpu: 100m
+  #   memory: 128Mi
 
 ports:
   houstonHTTP: 8870
@@ -61,3 +122,4 @@ ports:
   commanderGRPC: 50051
   orbitHTTP: 8080
   registryHTTP: 5000
+  installHTTP: 80

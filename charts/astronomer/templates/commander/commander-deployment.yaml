@@ -32,6 +32,9 @@ spec:
       containers:
         - name: {{ .Release.Name }}-commander
           image: {{- include "commander_image" . | indent 1 }}
+          imagePullPolicy: {{ .Values.images.commander.pullPolicy }}
+          resources:
+{{ toYaml .Values.commander.resources | indent 12 }}
           ports:
             - name: commander-http
               containerPort: {{ .Values.ports.commanderHTTP }}
@@ -58,8 +61,10 @@ spec:
               value: "8880"
             - name: COMMANDER_GRPC_PORT
               value: "50051"
-            - name: COMMANDER_KUBE_NAMESPACE
+            - name: COMMANDER_PLATFORM_NAMESPACE
               value: {{ .Release.Namespace }}
+            - name: COMMANDER_PLATFORM_RELEASE
+              value: {{ .Release.Name }}
             - name: COMMANDER_HELM_REPO
               value: {{ .Values.global.helmRepo }}
             - name: HELM_HOST

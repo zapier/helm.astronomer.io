@@ -4,11 +4,13 @@
 
 images:
   grafana:
-    name: astronomerinc/ap-grafana
-    tag: 0.3.2
-  bootstrapper:
-    name: astronomerinc/ap-db-bootstrapper
-    tag: 0.3.2
+    repository: astronomerinc/ap-grafana
+    tag: 0.6.1
+    pullPolicy: IfNotPresent
+  dbBootstrapper:
+    repository: astronomerinc/ap-db-bootstrapper
+    tag: 0.6.1
+    pullPolicy: IfNotPresent
 
 grafanaBackendSecret: grafana-backend
 
@@ -16,3 +18,11 @@ bootstrapDatabase: true
 
 ports:
   http: 3000
+
+resources: {}
+#  limits:
+#   cpu: 100m
+#   memory: 128Mi
+#  requests:
+#   cpu: 100m
+#   memory: 128Mi
