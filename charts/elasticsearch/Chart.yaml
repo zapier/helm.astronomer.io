@@ -1,0 +1,6 @@
+name: elasticsearch
+version: 0.0.0
+description: A Helm chart to deploy the Astronomer Platform Elasticsearch module
+keywords:
+  - astronomer
+  - elasticsearch
