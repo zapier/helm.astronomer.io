@@ -5,13 +5,17 @@ images:
     pullPolicy: Always
 
 clusterName: "astronomer"
-enabled: true
+
 replicas: 1
-resources:
-  limits:
-    cpu: 1000m
-  requests:
-    cpu: 100m
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
 env:
   # XPACK_GRAPH_ENABLED: "false"
   # XPACK_ML_ENABLED: "false"

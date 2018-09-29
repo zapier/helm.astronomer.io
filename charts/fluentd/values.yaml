@@ -12,3 +12,12 @@ elasticsearch:
 
 ports:
   promScrape: 24231
+
+# Configure resources
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi

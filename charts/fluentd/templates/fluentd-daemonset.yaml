@@ -57,6 +57,8 @@ spec:
           readOnly: true
         - name: config-volume-{{ template "fullname" . }}
           mountPath: /etc/fluent/config.d
+        resources:
+{{ toYaml .Values.resources | indent 12 }}
         ports:
           - name: monitor-agent
             containerPort: {{ .Values.ports.promScrape }}

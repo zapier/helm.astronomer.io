@@ -30,18 +30,6 @@ global:
   tillerNamespace: "kube-system"
 
 
-    # Enable Elasticsearch module
-    elasticsearch:
-      enabled: true
-
-    # Enable Kibana module
-    kibana:
-      enabled: true
-
-    # Enable Fluentd module
-    fluentd:
-      enabled: true
-
 #################################
 ## Astronomer configuration
 #################################
@@ -84,6 +72,10 @@ astronomer:
       limits:
         cpu: "500m"
         memory: "1024Mi"
+
+    persistence:
+      enabled: true
+      size: "100Gi"
 
   install:
     resources:
@@ -150,6 +142,99 @@ prometheus:
     limits:
       cpu: "500m"
       memory: "1024Mi"
+
+  persistence:
+    enabled: true
+    size: "100Gi"
+
+#################################
+## Elasticsearch configuration
+#################################
+elasticsearch:
+  # Enable elasticsearch chart
+  enabled: true
+
+  # Common configuration
+  persistence: true
+
+  # Configure client nodes
+  client:
+    # Match resources.requests.memory
+    heapMemory: "2g"
+
+    resources:
+      requests:
+        cpu: "1"
+        memory: "2Gi"
+      limits:
+        cpu: "2"
+        memory: "4Gi"
+
+  # Configure data nodes
+  data:
+    # Match resources.requests.memory
+    heapMemory: "2g"
+
+    resources:
+      requests:
+        cpu: "1"
+        memory: "2Gi"
+      limits:
+        cpu: "2"
+        memory: "4Gi"
+
+    persistence:
+      size: "100Gi"
+
+  # Configure master nodes
+  master:
+    # Match resources.requests.memory
+    heapMemory: "2g"
+
+    resources:
+      requests:
+        cpu: "1"
+        memory: "2Gi"
+      limits:
+        cpu: "2"
+        memory: "4Gi"
+
+    persistence:
+      size: "20Gi"
+
+
+#################################
+## Kibana configuration
+#################################
+kibana:
+  # Enable kibana chart
+  enabled: true
+
+  # Configure resources
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      cpu: "500m"
+      memory: "1024Mi"
+
+
+#################################
+## Fluentd configuration
+#################################
+fluentd:
+  # Enable fluentd chart
+  enabled: true
+
+  # Configure resources
+  # resources:
+  #   requests:
+  #     cpu: "250m"
+  #     memory: "512Mi"
+  #   limits:
+  #     cpu: "500m"
+  #     memory: "1024Mi"
 
 
 #################################
