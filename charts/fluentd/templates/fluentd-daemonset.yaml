@@ -14,7 +14,9 @@ metadata:
 spec:
   selector:
     matchLabels:
+      tier: logging
       component: {{ template "name" . }}
+      release: {{ .Release.Name }}
       chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
   template:
     metadata:
@@ -31,8 +33,8 @@ spec:
       serviceAccountName: {{ template "fullname" . }}
       containers:
       - name: {{ template "fullname" . }}
-        image:  "{{ .Values.images.fluentd.repository }}:{{ .Values.images.fluentd.tag }}"
-        imagePullPolicy: {{ .Values.images.fluentd.pullPolicy | quote }}
+        image: {{ template "fluentd_image" . }}
+        imagePullPolicy: {{ .Values.images.fluentd.pullPolicy }}
         env:
         - name: FLUENTD_ARGS
           value: --no-supervisor -q

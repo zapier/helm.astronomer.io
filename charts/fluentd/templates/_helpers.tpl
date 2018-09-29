@@ -21,3 +21,10 @@ Return the elasticsearch hostname
 {{- define "elasticsearch_host" -}}
 {{- printf "%s-%s" .Release.Name "elasticsearch" -}}
 {{- end -}}
+
+{{/*
+Full image name.
+*/}}
+{{- define "fluentd_image" -}}
+{{ .Values.images.nodeExporter.repository }}:{{ .Values.images.nodeExporter.tag }}
+{{- end -}}
