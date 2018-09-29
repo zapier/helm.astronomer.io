@@ -1,17 +1,20 @@
 dependencies:
+  # Platform components
   - name: astronomer
-    condition: global.modules.astronomer.enabled
-  - name: airflow
-    condition: global.modules.airflow.enabled
+    condition: astronomer.enabled
   - name: nginx
-    condition: global.modules.nginx.enabled
+    condition: nginx.enabled
   - name: grafana
-    condition: global.modules.grafana.enabled
+    condition: grafana.enabled
   - name: prometheus
-    condition: global.modules.prometheus.enabled
+    condition: prometheus.enabled
   - name: elasticsearch
-    condition: global.modules.elasticsearch.enabled
+    condition: elasticsearch.enabled
   - name: kibana
-    condition: global.modules.kibana.enabled
+    condition: kibana.enabled
   - name: fluentd
-    condition: global.modules.fluentd.enabled
+    condition: fluentd.enabled
+
+  # Airflow chart is deployed by the platform
+  - name: airflow
+    condition: airflow.enabled
