@@ -23,11 +23,7 @@ spec:
         component: {{ template "name" . }}
         release: {{ .Release.Name }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-      # This annotation ensures that fluentd does not get evicted if the node
-      # supports critical pod annotation based priority scheme.
-      # Note that this does not guarantee admission on the nodes (#40573).
       annotations:
-        scheduler.alpha.kubernetes.io/critical-pod: ''
         checksum/config: {{ include (print $.Template.BasePath "/fluentd-configmap.yaml") . | sha256sum }}
         prometheus.io/scrape: "true"
         prometheus.io/port: {{ .Values.ports.promScrape | quote }}
