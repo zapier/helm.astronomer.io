@@ -26,5 +26,5 @@ Return the elasticsearch hostname
 Full image name.
 */}}
 {{- define "fluentd_image" -}}
-{{ .Values.images.nodeExporter.repository }}:{{ .Values.images.nodeExporter.tag }}
+{{ .Values.images.fluentd.repository }}:{{ .Values.images.fluentd.tag }}
 {{- end -}}
