@@ -43,6 +43,11 @@ spec:
           tier: logging
           component: {{ template "name" . }}
           release: {{ .Release.Name }}
+    - podSelector:
+        matchLabels:
+          tier: logging
+          component: {{ template "name" . }}-exporter
+          release: {{ .Release.Name }}
     ports:
     - protocol: TCP
       port: {{ .Values.common.ports.http }}

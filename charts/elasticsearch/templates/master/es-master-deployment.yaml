@@ -1,7 +1,7 @@
 ################################
 ## Elasticsearch Master Deployment
 #################################
-apiVersion: {{ if .Values.common.persistence.enabled }}apps/v1beta1{{ else }}extensions/v1beta1{{ end }}
+apiVersion: {{ if .Values.common.persistence.enabled }}apps/v1{{ else }}extensions/v1beta1{{ end }}
 kind: {{ if .Values.common.persistence.enabled }}StatefulSet{{ else }}Deployment{{ end }}
 metadata:
   name: {{ template "fullname" . }}-master
@@ -17,6 +17,12 @@ spec:
   serviceName: {{ template "fullname" . }}-master
   {{- end }}
   replicas: {{ .Values.master.replicas }}
+  selector:
+    matchLabels:
+      tier: logging
+      component: {{ template "name" . }}
+      release: {{ .Release.Name }}
+      role: master
   template:
     metadata:
       labels:
