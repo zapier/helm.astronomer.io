@@ -1,0 +1,56 @@
+################################
+## Node Exporter DaemonSet
+#################################
+apiVersion: apps/v1beta2
+kind: DaemonSet
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    tier: logging
+    component: {{ template "name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+spec:
+  selector:
+    matchLabels:
+      tier: logging
+      component: {{ template "name" . }}
+      release: "{{ .Release.Name }}"
+  template:
+    metadata:
+      labels:
+        tier: logging
+        component: {{ template "name" . }}
+        release: "{{ .Release.Name }}"
+      annotations:
+        prometheus.io/port: {{ .Values.ports.scrape | quote }}
+        prometheus.io/scrape: "true"
+    spec:
+      containers:
+        - name: node-exporter
+          image: {{ template "node_exporter_image" . }}
+          imagePullPolicy: {{ .Values.images.nodeExporter.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.ports.scrape }}
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - mountPath: /host/proc
+              name: proc-fs
+            - mountPath: /host/sys
+              name: sys-fs
+            - mountPath: /rootfs
+              name: root-fs
+          hostNetwork: true
+          hostPID: true
+      volumes:
+        - name: proc-fs
+          hostPath:
+            path: /proc
+        - name: sys-fs
+          hostPath:
+            path: /sys
+        - name: root-fs
+          hostPath:
+            path: /
