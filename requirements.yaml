@@ -14,7 +14,10 @@ dependencies:
     condition: kibana.enabled
   - name: fluentd
     condition: fluentd.enabled
+  - name: kube-state
+    condition: kubeState.enabled
 
   # Airflow chart is deployed by the platform
   - name: airflow
     condition: airflow.enabled
+    condition: global.modules.prometheus.enabled
