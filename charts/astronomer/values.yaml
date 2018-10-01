@@ -32,13 +32,6 @@ images:
     tag: 0.6.1
     pullPolicy: IfNotPresent
 
-# Astronomer platform config
-data:
-  houstonDatabaseSecret: "houston-database"
-  airflowDatabaseSecret: "houston-database"
-
-bootstrapDatabase: true
-
 smtp:
   uri: ~
 
@@ -67,6 +60,23 @@ orbit:
   #   memory: 128Mi
 
 houston:
+  # Houston datastore
+  backendSecretName: ~
+  backendConnection: {}
+    # user: ~
+    # pass: ~
+    # host: ~
+    # port: ~
+    # db: ~
+  # Airflow backends
+  airflowBackendSecretName: ~
+  airflowBackendConnection: {}
+    # user: ~
+    # pass: ~
+    # host: ~
+    # port: ~
+    # db: ~
+
   env: {}
   resources: {}
   #  limits:
@@ -104,8 +114,11 @@ registry:
     storageClassName:
 
   auth:
+    secretName: ~
+    connection: ~
     service: "docker-registry"
     issuer: "houston"
+
 
 install:
   resources: {}
