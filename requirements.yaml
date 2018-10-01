@@ -20,4 +20,3 @@ dependencies:
   # Airflow chart is deployed by the platform
   - name: airflow
     condition: airflow.enabled
-    condition: global.modules.prometheus.enabled
