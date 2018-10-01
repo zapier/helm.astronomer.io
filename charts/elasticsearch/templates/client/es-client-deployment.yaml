@@ -53,7 +53,7 @@ spec:
       {{- end }}
       initContainers:
       - name: init-sysctl
-        image: "{{ .Values.images.init.repository }}:{{ .Values.images.init.tag }}"
+        image: {{ template "init.image" . }}
         imagePullPolicy: {{ .Values.images.init.pullPolicy }}
         command: ["sysctl", "-w", "vm.max_map_count=262144"]
         securityContext:
@@ -66,7 +66,7 @@ spec:
             add:
               - IPC_LOCK
               - SYS_RESOURCE
-        image: "{{ .Values.images.es.repository }}:{{ .Values.images.es.tag }}"
+        image: {{ template "elasticsearch.image" . }}
         imagePullPolicy: {{ .Values.images.es.pullPolicy }}
         env:
         - name: NAMESPACE

@@ -39,7 +39,7 @@ spec:
         runAsUser: 1000
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.images.exporter.repository }}:{{ .Values.images.exporter.tag }}"
+          image: {{ template "exporter.image" . }}
           imagePullPolicy: {{ .Values.images.exporter.pullPolicy }}
           command: ["elasticsearch_exporter",
                     "-es.uri=http://{{ .Release.Name }}-elasticsearch:{{ .Values.common.ports.http }}",

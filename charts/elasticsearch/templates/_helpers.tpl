@@ -22,3 +22,31 @@ Could use .Capabilities.KubeVersion.Minor in future.
 {{- define "curator.cronJob.apiVersion" -}}
 "batch/v1beta1"
 {{- end -}}
+
+{{/*
+Init image name.
+*/}}
+{{- define "init.image" -}}
+{{ .Values.images.init.repository }}:{{ .Values.images.init.tag }}
+{{- end -}}
+
+{{/*
+Elasticsearch image name.
+*/}}
+{{- define "elasticsearch.image" -}}
+{{ .Values.images.es.repository }}:{{ .Values.images.es.tag }}
+{{- end -}}
+
+{{/*
+Curator image name.
+*/}}
+{{- define "curator.image" -}}
+{{ .Values.images.curator.repository }}:{{ .Values.images.curator.tag }}
+{{- end -}}
+
+{{/*
+Exporter image name.
+*/}}
+{{- define "exporter.image" -}}
+{{ .Values.images.exporter.repository }}:{{ .Values.images.exporter.tag }}
+{{- end -}}
