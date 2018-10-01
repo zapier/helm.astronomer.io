@@ -2,13 +2,11 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-global:
-  imageTag: v1.4.0
-
 images:
-  kubestate:
-    repository: quay.io/coreos/kube-state-metrics
-    tag: v1.4.0
+  kubeState:
+    repository: astronomerinc/ap-kube-state
+    tag: 0.6.1
+    pullPolicy: IfNotPresent
 
 env: {}
 resources: {}

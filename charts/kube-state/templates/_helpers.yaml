@@ -32,5 +32,5 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{ define "kube-state.image" -}}
-{{ .Values.images.kubestate.repository }}:{{ or .Values.global.imageTag .Values.images.kubestate.tag }}
+{{ .Values.images.kubeState.repository }}:{{ .Values.images.kubeState.tag }}
 {{- end }}
