@@ -1,10 +1,8 @@
-Thank you for installing Astronomer Enterprise!
+Thank you for installing Astronomer!
 
 Your release is named {{ .Release.Name }}.
 
 {{- if .Values.global.baseDomain }}
-
-## Astronomer Airflow Install
 
 The platform components may take a few minutes to spin up.
 
