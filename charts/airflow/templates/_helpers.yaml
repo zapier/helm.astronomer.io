@@ -4,6 +4,10 @@
   {{- range $i, $config := .Values.env }}
   - name: {{ $config.name }}
     value: {{ $config.value | quote }}
+    {{- if eq .Values.executor "KubernetesExecutor" }}
+  - name: AIRFLOW__KUBERNETES_SECRETS__{{ $config.name }}
+    value: {{ $config.value | quote }}
+    {{- end }}
   {{- end }}
   # Hard Coded Airflow Envs
   - name: AIRFLOW__SCHEDULER__STATSD_ON
@@ -30,12 +34,41 @@
   {{- end }}
   # Dynamically created secret envs
   {{- range $i, $config := .Values.secret }}
+    {{- if hasKey $config "keys" }}
+      {{- range $_, $key := $config.keys }}
+  - name: {{ $key }}
+    valueFrom:
+      secretKeyRef:
+        name: {{ $config.value }}
+        key: {{ $key }}
+      {{- end }}
+    {{- else }}
   - name: {{ $config.name }}
     valueFrom:
       secretKeyRef:
         name: {{ $config.value }}
-        key:  value
-  {{- end}}
+        key: value
+    {{- end }}
+  {{- end }}
+  {{- if eq .Values.executor "KubernetesExecutor" }}
+    {{- range $i, $config := .Values.secret }}
+      {{- if hasKey $config "keys" }}
+        {{- range $_, $key := $config.keys }}
+  - name: AIRFLOW__KUBERNETES_SECRETS__{{ $key }}
+    valueFrom:
+      secretKeyRef:
+        name: {{ $config.value }}
+        key: {{ $key }}
+        {{- end }}
+      {{- else }}
+  - name: AIRFLOW__KUBERNETES_SECRETS__{{ $config.name }}
+    valueFrom:
+      secretKeyRef:
+        name: {{ $config.value }}
+        key: value
+      {{- end }}
+    {{- end }}
+  {{ end }}
   # Hard Coded Secret Envs
   - name: AIRFLOW__SCHEDULER__STATSD_HOST
     value: "{{ .Release.Name }}-statsd"
