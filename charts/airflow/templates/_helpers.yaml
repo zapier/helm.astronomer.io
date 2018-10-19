@@ -34,39 +34,19 @@
   {{- end }}
   # Dynamically created secret envs
   {{- range $i, $config := .Values.secret }}
-    {{- if hasKey $config "keys" }}
-      {{- range $_, $key := $config.keys }}
-  - name: {{ $key }}
-    valueFrom:
-      secretKeyRef:
-        name: {{ $config.value }}
-        key: {{ $key }}
-      {{- end }}
-    {{- else }}
   - name: {{ $config.name }}
     valueFrom:
       secretKeyRef:
         name: {{ $config.value }}
-        key: value
-    {{- end }}
+        key: {{ default "value" $config.key }}
   {{- end }}
   {{- if eq .Values.executor "KubernetesExecutor" }}
     {{- range $i, $config := .Values.secret }}
-      {{- if hasKey $config "keys" }}
-        {{- range $_, $key := $config.keys }}
-  - name: AIRFLOW__KUBERNETES_SECRETS__{{ $key }}
-    valueFrom:
-      secretKeyRef:
-        name: {{ $config.value }}
-        key: {{ $key }}
-        {{- end }}
-      {{- else }}
   - name: AIRFLOW__KUBERNETES_SECRETS__{{ $config.name }}
     valueFrom:
       secretKeyRef:
         name: {{ $config.value }}
-        key: value
-      {{- end }}
+        key: {{ default "value" $config.key }}
     {{- end }}
   {{ end }}
   # Hard Coded Secret Envs
