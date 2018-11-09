@@ -85,7 +85,21 @@ images:
     pullPolicy: IfNotPresent
 
 # Environment variables for all airflow containers
-env: []
+env: [
+"AIRFLOW__CORE__PARALLELISM=5",
+"AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow",
+"AIRFLOW__CORE__EXECUTOR=CeleryExecutor",
+"AIRFLOW__CORE__TASK_LOG_READER=stdout",
+"AIRFLOW__CORE__LOGGING_CONFIG_CLASS=airflow.config.log_config.LOGGING_CONFIG",
+"AIRFLOW__CORE__REMOTE_LOGGING=True",
+"AIRFLOW__CELERY__BROKER_URL=redis://redis:6379/0",
+"AIRFLOW__CELERY__RESULT_BACKEND=db+postgresql://airflow:airflow@postgres:5432/airflow",
+"AIRFLOW__SCHEDULER__STATSD_ON=True",
+"AIRFLOW__SCHEDULER__STATSD_HOST=statsd-exporter",
+"AIRFLOW__SCHEDULER__STATSD_PORT=9125",
+"AIRFLOW__SCHEDULER__STATSD_PREFIX=airflow",
+"AIRFLOW__ELASTICSEARCH__ELASTICSEARCH_HOST=elasticsearch:9200"
+]
 
 # Secrets for all airflow containers
 secret: []
