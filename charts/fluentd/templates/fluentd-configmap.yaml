@@ -80,7 +80,7 @@ data:
       @type kubernetes_metadata
     </filter>
 
-    # Filter down by namespace and component (scheduler/webserver)
+    # Filter down by namespace and component (scheduler/webserver/worker)
     <filter kubernetes.**>
       @type grep
       <regexp>
@@ -89,7 +89,7 @@ data:
       </regexp>
       <regexp>
         key $.kubernetes.labels.component
-        pattern ^(scheduler|webserver)$
+        pattern ^(scheduler|webserver|worker)$
       </regexp>
     </filter>
 
@@ -106,8 +106,40 @@ data:
       </record>
     </filter>
 
+    # Rewrite Worker tags
+    <filter kubernetes.**>
+      @type rewrite_tag_filter
+      <rule>
+        key record.component
+        pattern ^(worker)$
+        tag airflow.task.**
+      </rule>
+    </filter>
+
+    # Rewrite scheduler and webserver tags
+    <filter kubernetes.**>
+      @type rewrite_tag_filter
+      <rule>
+        key record.component
+        pattern ^(scheduler|webserver)$
+        tag airflow.system.**
+      </rule>
+    </filter>
+
+    # Apply worker logic to record transform
+    <filter airflow.task.**>
+    @type record_transformer
+    enable_ruby
+      <record>
+        message ${record["message"]}
+        log_id ${record["dag_id"]}_${record["task_id"]}_${record["execution_date"]&.gsub("+", "_")&.gsub(" ", "T")&.gsub("-", "_")&.gsub(":", "_")}_${record["try_number"]}
+        offset ${time = Time.now; time.to_i * (10 ** 9) + time.nsec}
+      </record>
+    </filter>
+
+
     # Send off to elasticsearch
-    <match kubernetes.**>
+    <match airflow.**>
       @id elasticsearch
       @type elasticsearch_dynamic
       @log_level info
