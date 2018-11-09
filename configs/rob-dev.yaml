@@ -1,0 +1,35 @@
+#################################
+## Chart overrides
+#################################
+
+# Global overrides
+global:
+  baseDomain: rob-dev.astronomer.io
+  tlsSecret: astronomer-tls
+  acme: false
+
+nginx:
+  loadBalancerIP: 35.221.62.40
+  preserveSourceIP: true
+
+astronomer:
+  registry:
+    persistence:
+      enabled: false
+
+prometheus:
+  persistence:
+    enabled: false
+
+# If on logging branch
+elasticsearch:
+  common:
+    persistence:
+      enabled: false
+      
+grafana:
+  images:
+    grafana:
+      repository: astronomerinc/ap-grafana
+      tag: master
+      pullPolicy: Always
