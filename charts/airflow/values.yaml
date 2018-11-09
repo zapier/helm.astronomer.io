@@ -86,6 +86,8 @@ images:
 
 # Environment variables for all airflow containers
 env: [
+"OUTPUT_HOST=elasticsearch",
+"OUTPUT_PORT=9200",
 "AIRFLOW__CORE__PARALLELISM=5",
 "AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow",
 "AIRFLOW__CORE__EXECUTOR=CeleryExecutor",
