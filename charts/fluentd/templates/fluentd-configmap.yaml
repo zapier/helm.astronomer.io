@@ -79,7 +79,8 @@ data:
     <filter kubernetes.**>
       @type kubernetes_metadata
     </filter>
-    # Filter down by namespace and component (scheduler/webserver)
+
+    # Filter down by namespace and component (scheduler/webserver/worker)
     <filter kubernetes.**>
       @type grep
       <regexp>
@@ -104,34 +105,27 @@ data:
       </record>
     </filter>
 
-    <match kubernetes.**>
+    # Rewrite Worker tags
+    <filter kubernetes.**>
       @type rewrite_tag_filter
       <rule>
-        key component
-        pattern ^(scheduler)$
-        tag airflow.system
-      </rule>
-      <rule>
-        key component
-        pattern ^(webserver)$
-        tag airflow.system
-      </rule>
-      <rule>
-        key component
+        key record.component
         pattern ^(worker)$
-        tag airflow.task
+        tag airflow.task.**
       </rule>
-    </match>
-
-    <filter airflow.task.**>
-      @type parser
-      format json
-      replace_invalid_sequence true
-      emit_invalid_record_to_error false
-      key_name log
-      reserve_data true
     </filter>
 
+    # Rewrite scheduler and webserver tags
+    <filter kubernetes.**>
+      @type rewrite_tag_filter
+      <rule>
+        key record.component
+        pattern ^(scheduler|webserver)$
+        tag airflow.system.**
+      </rule>
+    </filter>
+
+    # Apply worker logic to record transform
     <filter airflow.task.**>
       @type record_transformer
       enable_ruby
@@ -141,6 +135,7 @@ data:
         offset ${time = Time.now; time.to_i * (10 ** 9) + time.nsec}
       </record>
     </filter>
+
 
     # Send off to elasticsearch
     <match airflow.**>
