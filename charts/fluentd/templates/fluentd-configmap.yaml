@@ -125,6 +125,20 @@ data:
       </rule>
     </filter>
 
+    # Apply logic to transform nested JSON fields into readable format
+    # If the handler is changed in the future to not return JSONs, this is not necessary
+    <filter airflow.task.**>
+      @type parser
+      <parse>
+        @type json
+        json_parser json
+      </parse>
+      replace_invalid_sequence true
+      emit_invalid_record_to_error false
+      key_name log
+      reserve_data true
+    </filter>
+
     # Apply worker logic to record transform
     <filter airflow.task.**>
       @type record_transformer
