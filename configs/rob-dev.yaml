@@ -26,7 +26,13 @@ elasticsearch:
   common:
     persistence:
       enabled: false
-      
+
+kibana:
+  common:
+    persistence:
+      enabled: false
+
+
 grafana:
   images:
     grafana:
