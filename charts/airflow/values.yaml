@@ -44,7 +44,7 @@ rbacEnabled: true
 
 # Airflow version
 # Options: 1.9.0, 1.10.0
-airflowVersion: "1.10.0"
+airflowVersion: "1.9.0"
 
 # Airflow executor
 # Options: SequentialExecutor, LocalExecutor, CeleryExecutor, KubernetesExecutor
@@ -60,13 +60,13 @@ images:
   airflow:
     # If tag is specified here or overridden, that value is used, otherwise
     # it is build using {{ .Chart.Version }}-{{ .Values.airflowVersion }}
-    repository: astronomerio/ap-airflow
-    tag: rob-dev
-    pullPolicy: Always
+    repository: astronomerinc/ap-airflow
+    tag: ~
+    pullPolicy: IfNotPresent
   flower:
     repository: astronomerinc/ap-airflow
     tag: ~
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
   statsd:
     repository: astronomerinc/ap-statsd-exporter
     tag: 0.7.2
@@ -124,9 +124,9 @@ workers:
 
   persistence:
     # Enable persistent volumes
-    enabled: false
+    enabled: true
     # Volume size for worker StatefulSet
-    # size: 100Gi
+    size: 100Gi
     # If using a custom storageClass, pass name ref to all statefulSets here
     storageClassName:
 
@@ -211,7 +211,7 @@ statsd:
 # Pgbouncer settings
 pgbouncer:
   # Enable pgbouncer
-  enabled: true
+  enabled: false
 
   # Pool sizes
   metadataPoolSize: 3
