@@ -69,5 +69,5 @@ spec:
               value: {{ .Values.global.helmRepo }}
             - name: COMMANDER_HELM_REPO_NAME
               value: {{ .Values.global.helmRepoName }}
-            - name: COMMANDER_TILLER_HOST
-              value: {{ .Values.global.tillerHost }}
+            - name: HELM_HOST
+              value: {{ .Values.global.helmHost }}
