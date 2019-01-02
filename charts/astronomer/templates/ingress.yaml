@@ -13,36 +13,17 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     heritage: {{ .Release.Service }}
   annotations:
-    kubernetes.io/ingress.class: "{{ .Release.Name }}-nginx"
-    kubernetes.io/tls-acme: {{ eq .Values.global.acme true | quote }}
+  {{- range $key, $value := .Values.global.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end }}
     nginx.ingress.kubernetes.io/configuration-snippet: |
       if ($host = '{{ .Values.global.baseDomain }}' ) {
         rewrite ^ https://app.{{ .Values.global.baseDomain }}$request_uri permanent;
       }
 spec:
-  {{- if or .Values.global.tlsSecret .Values.global.acme }}
   tls:
-  {{- if .Values.global.acme }}
-    - secretName: astronomer-public-tls
-  {{- end }}
-  {{- if .Values.global.tlsSecret }}
-    - secretName: {{ .Values.global.tlsSecret }}
-  {{- end }}
-      hosts:
-        - {{ .Values.global.baseDomain }}
-        - app.{{ .Values.global.baseDomain }}
-        - houston.{{ .Values.global.baseDomain }}
-        - registry.{{ .Values.global.baseDomain }}
-        - install.{{ .Values.global.baseDomain }}
-  {{- end }}
+{{ toYaml .Values.global.ingress.tls | indent 4 }}
   rules:
-  - host: {{ .Values.global.baseDomain }}
-    http:
-      paths:
-        - path: /
-          backend:
-            serviceName: {{ .Release.Name }}-orbit
-            servicePort: orbit-http
   - host: app.{{ .Values.global.baseDomain }}
     http:
       paths:
@@ -71,4 +52,4 @@ spec:
           backend:
             serviceName: {{ .Release.Name }}-cli-install
             servicePort: install-http
-{{- end }}
+{{ end }}

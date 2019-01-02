@@ -5,6 +5,9 @@
 # User in pilot containers
 uid: 100
 
+global:
+  enableNetworkPolicies: false
+
 # Images for pilot
 images:
   commander:
