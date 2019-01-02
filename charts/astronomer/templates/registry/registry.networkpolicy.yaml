@@ -1,6 +1,7 @@
 ################################
 ## Registry NetworkPolicy
 #################################
+{{ if .Values.global.enableNetworkPolicies }}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -37,3 +38,4 @@ spec:
       port: {{ .Values.ports.registryHTTP }}
     # - protocol: TCP
     #   port: {{ .Values.ports.registryScrape }}
+{{ end }}
